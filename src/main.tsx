@@ -1,6 +1,6 @@
 import React, {useMemo,useState} from 'react';
 import {createRoot} from 'react-dom/client';
-import {Calculator, Home, Info, ShieldCheck, ChevronRight, Wallet, CalendarDays, TrendingDown} from 'lucide-react';
+import {Calculator, ShieldCheck, ChevronRight, Wallet, CalendarDays, TrendingDown} from 'lucide-react';
 import {calculateLoan, type Method} from './calc';
 import './style.css';
 const money=(n:number)=>Math.round(n).toLocaleString('ko-KR');
