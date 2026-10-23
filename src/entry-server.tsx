@@ -1,5 +1,6 @@
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {App} from './App';
-export {ROUTES} from './routes';
+export {ROUTES, SITE_URL} from './routes';
+export {FAQ} from './faq';
 export function render(path:string){ return renderToString(<React.StrictMode><App initialPath={path}/></React.StrictMode>); }
