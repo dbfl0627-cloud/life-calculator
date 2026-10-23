@@ -105,3 +105,32 @@ export function LtvIllustration() {
     </g>
   </Frame>;
 }
+
+/** 404: 길 잃은 집 — 표지판, 물음표, 돋보기 */
+export function NotFoundIllustration() {
+  return <Frame id="illust-404" title="길을 잃은 집과 표지판으로 표현한 페이지 없음(404) 일러스트">
+    <circle cx="352" cy="54" r="22" fill="#d4e5f4"/>
+    {/* 404 숫자 */}
+    <text x="210" y="92" textAnchor="middle" fontSize="64" fontWeight="900" fill="#d4e5f4" fontFamily={FONT} letterSpacing="4">404</text>
+    {/* 집 */}
+    <path d="M52 168 L122 114 L192 168 Z" fill="#0d4177"/>
+    <rect x="66" y="164" width="112" height="86" rx="6" fill="#fff" stroke="#c9d9ea" strokeWidth="2"/>
+    <rect x="80" y="182" width="30" height="26" rx="4" fill="#d4e5f4"/>
+    <path d="M95 182 V208 M80 195 H110" stroke="#fff" strokeWidth="3"/>
+    <rect x="124" y="196" width="36" height="54" rx="4" fill="#216baa"/>
+    <circle cx="153" cy="224" r="3" fill="#fff"/>
+    {/* 말풍선 물음표 */}
+    <rect x="150" y="104" width="46" height="42" rx="12" fill="#f2c14e"/>
+    <path d="M164 146 L160 158 L174 146 Z" fill="#f2c14e"/>
+    <text x="173" y="136" textAnchor="middle" fontSize="26" fontWeight="900" fill="#0b2545" fontFamily={FONT}>?</text>
+    {/* 갈림길 표지판 */}
+    <rect x="292" y="120" width="8" height="130" rx="3" fill="#7a8a9c"/>
+    <path d="M232 128 H330 L346 142 L330 156 H232 Z" fill="#216baa"/>
+    <text x="284" y="147" textAnchor="middle" fontSize="13" fontWeight="800" fill="#fff" fontFamily={FONT}>계산기</text>
+    <path d="M360 170 H262 L246 184 L262 198 H360 Z" fill="#0b2545"/>
+    <text x="308" y="189" textAnchor="middle" fontSize="13" fontWeight="800" fill="#fff" fontFamily={FONT}>홈으로</text>
+    {/* 돋보기 */}
+    <circle cx="226" cy="226" r="18" fill="#e8f3ff" stroke="#0b2545" strokeWidth="6"/>
+    <rect x="238" y="238" width="22" height="8" rx="4" fill="#0b2545" transform="rotate(45 240 240)"/>
+  </Frame>;
+}

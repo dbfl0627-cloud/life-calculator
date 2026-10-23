@@ -44,3 +44,8 @@
 .example-table caption{caption-side:top;text-align:left;padding:14px 16px 4px;font-size:13px;font-weight:700;color:#60758c}
 .example-table td:first-child{font-weight:700;color:#2c3e55}
 .updated{margin-top:28px;font-size:13px;color:#7a8a9c}
+
+.article.notfound{max-width:1120px;padding-top:0}
+.notfound-hero{padding:56px 0 30px}
+.notfound-hero h1{font-size:clamp(30px,4vw,44px)}
+.notfound .primary{text-decoration:none;color:#fff}

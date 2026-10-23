@@ -1,5 +1,6 @@
 import type React from 'react';
 import { Calculator, Percent, Home, ChevronRight } from 'lucide-react';
+import { NotFoundIllustration } from './Illustrations';
 
 type LinkProps = (path: string) => { href: string; onClick: (e: React.MouseEvent) => void };
 
@@ -29,9 +30,15 @@ export function RelatedTools({ current, link }: { current: string; link: LinkPro
 /** 없는 주소로 들어왔을 때 보여주는 화면(404). */
 export function NotFound({ link }: { link: LinkProps }) {
   return <section className="article notfound">
-    <span className="eyebrow">404 NOT FOUND</span>
-    <h1>페이지를 찾을 수 없습니다</h1>
-    <p>주소가 바뀌었거나 삭제된 페이지입니다. 아래 계산기에서 원하는 기능을 찾아보세요.</p>
+    <div className="hero with-illust notfound-hero">
+      <div>
+        <span className="eyebrow">404 NOT FOUND</span>
+        <h1>페이지를 찾을 수 없습니다</h1>
+        <p>주소가 바뀌었거나 삭제된 페이지입니다. 아래 계산기에서 원하는 기능을 찾아보세요.</p>
+        <a className="primary" {...link('/')}>홈으로 가기 <ChevronRight size={18}/></a>
+      </div>
+      <NotFoundIllustration/>
+    </div>
     <div className="about-tools">
       {TOOLS.map(({ path, icon: Icon, name, desc }) =>
         <a key={path} className="about-card" {...link(path)}>
