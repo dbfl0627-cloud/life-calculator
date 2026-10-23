@@ -23,16 +23,29 @@ export function loanFromMonthlyPayment(payment: number, annualRate: number, year
   return payment * (1 - Math.pow(1 + r, -n)) / r;
 }
 
+/** 지역별 기본 스트레스 금리(%p). 금융당국 발표에 따라 바뀌므로 화면에서 직접 수정할 수 있습니다. */
+export const STRESS_BASE = { capital: 3.0, local: 1.5 } as const;
+/** 금리유형별 스트레스 금리 반영비율(%) 대표값. 실제 비율은 고정기간·주기와 만기에 따라 달라집니다. */
+export const RATE_TYPE_RATIO = { variable: 100, mixed: 80, periodic: 40, fixed: 0 } as const;
+type Region = keyof typeof STRESS_BASE;
+type RateType = keyof typeof RATE_TYPE_RATIO;
+const RATE_TYPE_LABEL: Record<RateType,string> = { variable:'변동형', mixed:'혼합형', periodic:'주기형', fixed:'완전 고정형' };
+
 export default function DSR() {
   const [income, setIncome] = useState(8000);
   const [existingAnnual, setExistingAnnual] = useState(0);
   const [newLoan, setNewLoan] = useState(30000);
   const [rate, setRate] = useState(4.3);
-  const [stressRate, setStressRate] = useState(0);
+  const [stressOn, setStressOn] = useState(true);
+  const [region, setRegion] = useState<Region>('capital');
+  const [stressBase, setStressBase] = useState<number>(STRESS_BASE.capital);
+  const [rateType, setRateType] = useState<RateType>('variable');
+  const [ratio, setRatio] = useState<number>(RATE_TYPE_RATIO.variable);
+  const stressRate = stressOn ? safe(stressBase) * safe(ratio) / 100 : 0;
   const [years, setYears] = useState(40);
   const [limit, setLimit] = useState(40);
 
-  const valid = income > 0 && years > 0 && rate >= 0 && stressRate >= 0 &&
+  const valid = income > 0 && years > 0 && rate >= 0 && stressBase >= 0 && ratio >= 0 && ratio <= 100 &&
     existingAnnual >= 0 && newLoan >= 0 && Number.isFinite(income + existingAnnual + newLoan + rate + stressRate);
 
   const result = useMemo(() => {
@@ -63,11 +76,17 @@ export default function DSR() {
             <label>기존 대출 연간 원리금 <small>만원/년</small><input type="number" min="0" value={existingAnnual} onChange={e => setExistingAnnual(Number(e.target.value))}/></label>
             <label>신규 대출 희망금액 <small>만원</small><input type="number" min="0" value={newLoan} onChange={e => setNewLoan(Number(e.target.value))}/></label>
             <label>신규 대출금리 <small>연 %</small><input type="number" min="0" step="0.1" value={rate} onChange={e => setRate(Number(e.target.value))}/></label>
-            <label>추가 스트레스 금리 <small>%p</small><input type="number" min="0" step="0.1" value={stressRate} onChange={e => setStressRate(Number(e.target.value))}/></label>
             <label>대출기간 <small>년</small><select value={years} onChange={e => setYears(Number(e.target.value))}>{[10,15,20,25,30,35,40,45,50].map(y => <option value={y} key={y}>{y}년</option>)}</select></label>
             <label>적용 DSR 기준 <small>%</small><select value={limit} onChange={e => setLimit(Number(e.target.value))}><option value={40}>40%</option><option value={50}>50%</option></select></label>
           </div>
-          <p className="hint"><Info size={13} style={{verticalAlign:'middle'}}/> 기존 대출 연간 원리금은 모든 기존 대출의 연간 상환액을 합산하여 입력하세요. 스트레스 금리는 실제 이자 납부액이 아닌 심사용 가산금리로 가정합니다.</p>
+          <label className="check"><input type="checkbox" checked={stressOn} onChange={e => setStressOn(e.target.checked)}/> 스트레스 DSR 적용</label>
+          {stressOn && <div className="fields stress-fields">
+            <label>지역 <select value={region} onChange={e => { const r = e.target.value as Region; setRegion(r); setStressBase(STRESS_BASE[r]); }}><option value="capital">수도권·규제지역</option><option value="local">지방</option></select></label>
+            <label>기본 스트레스 금리 <small>%p</small><input type="number" min="0" step="0.05" value={stressBase} onChange={e => setStressBase(Number(e.target.value))}/></label>
+            <label>금리 유형 <select value={rateType} onChange={e => { const t = e.target.value as RateType; setRateType(t); setRatio(RATE_TYPE_RATIO[t]); }}>{(Object.keys(RATE_TYPE_LABEL) as RateType[]).map(t => <option key={t} value={t}>{RATE_TYPE_LABEL[t]}</option>)}</select></label>
+            <label>반영 비율 <small>%</small><input type="number" min="0" max="100" step="10" value={ratio} onChange={e => setRatio(Number(e.target.value))}/></label>
+          </div>}
+          <p className="hint"><Info size={13} style={{verticalAlign:'middle'}}/> 기존 대출 연간 원리금은 모든 기존 대출의 연간 상환액을 합산하여 입력하세요. 스트레스 금리는 실제 이자에는 붙지 않고 한도 심사에만 쓰이는 가산금리입니다. 기본값은 대표값이므로 실제 적용 수치는 은행에서 확인해 수정하세요.</p>
         </div>
         <div className="panel result">
           <h3><TrendingDown size={20}/> 예상 DSR 결과</h3>
@@ -80,6 +99,15 @@ export default function DSR() {
               <div><span>DSR 기준 잔여 연간 상환여력</span><strong>{fmt(result.remainingAnnual)}만원</strong></div>
             </div>
             <div className="bar" aria-label={`DSR 기준 사용률 ${Math.min(100, result.dsr / limit * 100).toFixed(0)}%`}><span style={{width:`${Math.min(100, result.dsr / limit * 100)}%`}}/></div>
+            <div className="formula" aria-label="계산식">
+              <strong>계산식</strong>
+              <p><span>① 심사용 금리</span>{stressOn
+                ? <>{rate.toFixed(2)}% + {safe(stressBase).toFixed(2)}%p × {safe(ratio)}% = <b>{result.effectiveRate.toFixed(2)}%</b></>
+                : <>{rate.toFixed(2)}% (스트레스 DSR 미적용) = <b>{result.effectiveRate.toFixed(2)}%</b></>}</p>
+              <p><span>② 신규 대출 연간 원리금</span>월 {result.newMonthly.toLocaleString('ko-KR',{maximumFractionDigits:1})}만원 × 12 = <b>{fmt(result.annualNew)}만원</b></p>
+              <p><span>③ DSR</span>({fmt(safe(existingAnnual))} + {fmt(result.annualNew)}) ÷ {fmt(income)} × 100 = <b>{result.dsr.toFixed(2)}%</b></p>
+              <p><span>④ 대출한도</span>(연소득 × {limit}% − 기존 원리금) = 연 {fmt(result.allowedAnnual)}만원 상환 가능 → 원금 환산 <b>{fmt(result.maxLoan)}만원</b></p>
+            </div>
             <p className="hint">선택한 DSR 기준 {limit}%에 대한 비율을 표시합니다. {result.dsr > limit ? '현재 입력한 신규 대출 희망금액은 선택 기준을 초과합니다.' : '현재 입력한 신규 대출 희망금액은 선택 기준 이내입니다.'}</p>
           </>}
         </div>
@@ -89,8 +117,8 @@ export default function DSR() {
       <h2>DSR 계산 방법</h2>
       <div className="info-grid">
         <article><h3>DSR이란?</h3><p>DSR(총부채원리금상환비율)은 연소득 대비 모든 대출의 연간 원금과 이자 상환액이 차지하는 비율입니다.</p></article>
-        <article><h3>계산식</h3><p>DSR(%) = (기존 대출 연간 원리금 + 신규 대출 연간 원리금) ÷ 연소득 × 100</p></article>
-        <article><h3>스트레스 금리</h3><p>심사 목적의 추가 금리입니다. 상품·시기·지역·대출유형별 실제 적용 방식은 다를 수 있으므로 직접 확인하여 입력하세요.</p></article>
+        <article><h3>계산식</h3><p>DSR(%) = (기존 대출 연간 원리금 + 신규 대출 연간 원리금) ÷ 연소득 × 100</p><p>월 원리금 = 대출원금 × r ÷ (1 − (1 + r)<sup>−n</sup>)<br/>r = 심사용 금리 ÷ 12, n = 대출기간(개월)</p></article>
+        <article><h3>스트레스 DSR</h3><p>심사용 금리 = 대출금리 + 기본 스트레스 금리 × 금리유형별 반영비율</p><p>금리 상승 위험을 반영해 한도를 계산할 때만 금리를 높여 잡는 제도입니다. 변동형은 100% 반영되고, 혼합형·주기형은 고정 기간이 길수록 반영비율이 낮아지며, 완전 고정형은 반영되지 않습니다.</p></article>
       </div>
       <h2>계산 결과 유의사항</h2>
       <p className="hint">이 도구는 신규 대출을 <strong>원리금균등상환</strong>으로 가정한 간이 시뮬레이터입니다. 기존 대출의 실제 DSR 인정 상환액, 신용대출 산정만기, 스트레스 DSR 세부 규정, DSR 예외 대출, LTV, 지역·상품별 한도, 금융기관 내부 심사 기준은 자동 반영하지 않습니다. 40%·50%는 선택 가능한 비교용 가정이며 실제 적용 기준을 뜻하지 않습니다. 표시된 한도는 대출 승인 또는 실제 가능 금액을 보장하지 않습니다.</p>
