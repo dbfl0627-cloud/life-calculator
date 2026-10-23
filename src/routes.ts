@@ -7,6 +7,7 @@ export const ROUTES: Record<string, RouteMeta> = {
   '/': { title:CALC_TITLE, description:CALC_DESC, canonical:'/', inSitemap:true },
   // 홈과 같은 계산기 화면이므로 검색 결과가 나뉘지 않도록 홈을 대표 주소로 지정
   '/mortgage/': { title:CALC_TITLE, description:CALC_DESC, canonical:'/', inSitemap:false },
+  '/dsr/': { title:'DSR 계산기 - 연봉으로 대출한도 계산 | ZIPMOYA', description:'연소득과 기존 대출 상환액을 입력하면 DSR(총부채원리금상환비율)과 신규 대출 가능액을 바로 계산합니다. 스트레스 금리와 DSR 40%·50% 기준 비교까지 무료로 확인하세요.', canonical:'/dsr/', inSitemap:true },
   '/about/': { title:'ZIPMOYA(집모야) 소개 | ZIPMOYA', description:'ZIPMOYA(집모야)는 주담대 계산기 등 집과 부동산에 관한 계산 도구와 정보를 제공합니다.', canonical:'/about/', inSitemap:true },
   '/privacy/': { title:'개인정보처리방침 | ZIPMOYA', description:'ZIPMOYA의 개인정보 처리 방침입니다. 계산 입력값은 브라우저에서만 처리됩니다.', canonical:'/privacy/', inSitemap:true },
 };
