@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Calculator, Info, Wallet, TrendingDown } from 'lucide-react';
+import { DsrIllustration } from './Illustrations';
 
 /** ZIPMOYA DSR 간이 계산기. 금액 입력 단위: 만원, 금리: 연 %. */
 const fmt = (value: number) => Math.round(value).toLocaleString('ko-KR');
@@ -76,10 +77,13 @@ export default function DSR() {
   }, [income, existingAnnual, newLoan, rate, stressRate, years, limit]);
 
   return <>
-    <section className="hero">
+    <section className="hero with-illust">
+      <div>
       <span className="eyebrow"><Calculator size={15}/> ZIPMOYA DSR CALCULATOR</span>
       <h1>DSR 계산기<br/><em>연봉으로 대출한도 확인하기</em></h1>
       <p>연소득과 기존 대출의 연간 원리금 상환액을 입력하면 DSR 비율과 신규 대출 가능액을 간이 계산합니다.</p>
+      </div>
+      <DsrIllustration/>
     </section>
     <section className="section" id="dsr-calculator">
       <div className="section-heading"><h2>총부채원리금상환비율(DSR) 계산기</h2><p>연소득과 기존 대출 상환액을 바탕으로 DSR 비율과 신규 대출 가능액을 계산합니다.</p></div>

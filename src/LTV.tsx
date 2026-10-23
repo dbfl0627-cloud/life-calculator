@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Calculator, Home, Info, TrendingDown, Wallet } from 'lucide-react';
+import { LtvIllustration } from './Illustrations';
 
 /** ZIPMOYA LTV 간이 계산기. 금액 단위: 만원. */
 const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR');
@@ -45,11 +46,14 @@ export default function LTV() {
   }, [homePrice, ltvPercent, existingLoan, ownFunds, valid]);
 
   return <>
-    <section className="hero">
+    <section className="hero with-illust">
+      <div>
       <span className="eyebrow"><Calculator size={15}/> ZIPMOYA LTV CALCULATOR</span>
       <h1>LTV 계산기<br/><em>집값으로 담보대출 한도 확인하기</em></h1>
       <p>주택가격과 적용할 LTV 비율을 입력해 담보가치 기준 예상 대출한도와 필요한 추가 자금을 계산해 보세요.</p>
       <button className="primary" onClick={() => document.getElementById('ltv-calculator')?.scrollIntoView({ behavior: 'smooth' })}>지금 계산하기</button>
+      </div>
+      <LtvIllustration/>
     </section>
 
     <section className="section" id="ltv-calculator">
