@@ -1,4 +1,6 @@
-# 생활계산소
+# ZIPMOYA (집모야)
+
+서비스 주소: https://zipmoya.com
 
 무료 주택담보대출 계산기 (Vite + React + TypeScript).
 

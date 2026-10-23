@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://life-calculator.dbfl0627.workers.dev/sitemap.xml
+Sitemap: https://zipmoya.com/sitemap.xml

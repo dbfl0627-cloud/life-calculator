@@ -8,12 +8,13 @@ const template=await readFile('dist/index.html','utf8');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const jsonLd=obj=>`<script type="application/ld+json">${JSON.stringify(obj).replace(/</g,'\\u003c')}</script>`;
 const calcLd=[
-  {'@context':'https://schema.org','@type':'WebApplication',name:'주택담보대출 계산기 (주담대 계산기)',alternateName:['주담대 계산기','주택담보대출 계산기','생활계산소'],url:SITE_URL+'/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}},
+  {'@context':'https://schema.org','@type':'WebSite',name:'ZIPMOYA',alternateName:['집모야','zipmoya'],url:SITE_URL+'/',inLanguage:'ko'},
+  {'@context':'https://schema.org','@type':'WebApplication',name:'주택담보대출 계산기 (주담대 계산기)',alternateName:['주담대 계산기','주택담보대출 계산기','ZIPMOYA','집모야'],url:SITE_URL+'/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}},
   {'@context':'https://schema.org','@type':'FAQPage',mainEntity:FAQ.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))},
 ];
 for(const [route,meta] of Object.entries(ROUTES)){
   const url=SITE_URL+meta.canonical;
-  const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="생활계산소"/><meta property="og:locale" content="ko_KR"/>`
+  const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="ZIPMOYA"/><meta property="og:locale" content="ko_KR"/>`
     +(meta.canonical==='/'?calcLd.map(jsonLd).join(''):'');
   let html=template.replace(/<link rel="canonical"[^>]*>/,"")
     .replace(/<title>.*?<\/title>/,`<title>${esc(meta.title)}</title>${extraHead}`)
