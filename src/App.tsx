@@ -11,13 +11,16 @@ export function App({initialPath}:{initialPath:string}){
  const [page,setPage]=useState(normalizePath(initialPath));
  const [amount,setAmount]=useState(39000),[rate,setRate]=useState(4.3),[years,setYears]=useState(40),[grace,setGrace]=useState(0),[method,setMethod]=useState<Method>('equal-payment');
  const [expanded,setExpanded]=useState(false);
+ // 현재 페이지 메뉴를 진하게 표시 (/mortgage/는 홈과 같은 화면)
+ const current=page==='/mortgage/'?'/':page;
+ const navLink=(p:string)=>({...link(p),className:current===p?'active':undefined,'aria-current':current===p?'page' as const:undefined});
  const link=(p:string)=>({href:p,onClick:(e:React.MouseEvent)=>{e.preventDefault();go(p)}});
  const go=(p:string)=>{history.pushState(null,'',p);setPage(p);applyMeta(p);scrollTo(0,0)};
  React.useEffect(()=>{const f=()=>{const p=normalizePath(location.pathname);setPage(p);applyMeta(p)};window.addEventListener('popstate',f);return()=>window.removeEventListener('popstate',f)},[]);
  const rows=useMemo(()=>{try{return calculateLoan(amount*10000,rate,years,grace,method)}catch{return []}},[amount,rate,years,grace,method]);
  const totalInterest=rows.reduce((s,r)=>s+r.interest,0),total=rows.reduce((s,r)=>s+r.payment,0);
  const firstRepayment=rows.find(r=>!r.grace)?.payment??0;
- return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...link('/')}>주담대 계산기</a><a {...link('/dsr/')}>DSR 계산기</a><a {...link('/about/')}>소개</a></nav></div></header>
+ return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/about/')}>소개</a></nav></div></header>
  <main className="wrap">
  {page==='/about/'?<section className="article"><h1>ZIPMOYA(집모야) 소개</h1><p>ZIPMOYA(집모야)는 집과 부동산에 관한 계산 도구와 정보를 한곳에 모아 제공합니다. 첫 번째 도구는 주택담보대출(주담대) 상환액 계산기입니다.</p><p>계산 결과는 입력 조건에 따른 수학적 추정치이며 실제 금융기관의 약정, 금리 변경, 수수료, 세금, 상환일과 원 단위 처리에 따라 다를 수 있습니다.</p><p>문의: <a href="mailto:dbfl0627@gmail.com">dbfl0627@gmail.com</a></p></section>:
  page==='/privacy/'?<Privacy/>:
