@@ -77,7 +77,7 @@ export default function DSR() {
 
   return <>
     <section className="hero">
-      <span className="eyebrow"><Calculator size={15}/> ZIPMOYA LOAN CALCULATOR</span>
+      <span className="eyebrow"><Calculator size={15}/> ZIPMOYA DSR CALCULATOR</span>
       <h1>DSR 계산기<br/><em>연봉으로 대출한도 확인하기</em></h1>
       <p>연소득과 기존 대출의 연간 원리금 상환액을 입력하면 DSR 비율과 신규 대출 가능액을 간이 계산합니다.</p>
     </section>
