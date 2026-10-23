@@ -3,6 +3,7 @@ import { Calculator, Home, Info, TrendingDown, Wallet } from 'lucide-react';
 import { LtvIllustration } from './Illustrations';
 import { LTV_FAQ } from './faq';
 import { koreanAmount } from './format';
+import { LtvExamples, UpdatedNote } from './Examples';
 
 /** ZIPMOYA LTV 간이 계산기. 금액 단위: 만원. */
 const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR');
@@ -99,7 +100,7 @@ export default function LTV() {
             <div className="bar" aria-label={`담보대출 추정 비율 ${result.actualLtv.toFixed(1)}%`}>
               <span style={{ width: `${Math.min(100, result.actualLtv)}%` }}/>
             </div>
-            <p className="hint">부족 자금은 주택가격과 보유 현금·추가 대출한도만 비교한 금액입니다. 취득세·중개보수·등기비용 등은 별도입니다.</p>
+            <p className="hint">부족 자금은 주택가격과 보유 현금·추가 대출한도만 비교한 금액입니다. 취득세·중개보수·등기비용 등은 별도입니다. 소득 기준 한도는 <a href="/dsr/">DSR 계산기</a>로 확인하세요.</p>
             {existingLoan > result.collateralLimit && <p role="alert">기존 담보대출 잔액이 선택한 LTV 기준 한도를 초과합니다. 추가 대출 가능액은 0원으로 표시됩니다.</p>}
           </>}
         </div>
@@ -114,10 +115,12 @@ export default function LTV() {
         <article><h3>계산식</h3><p>담보가치 기준 한도 = 주택가격 × LTV 비율. 추가 한도 = 최대(0, 담보한도 − 기존 담보대출 잔액).</p></article>
         <article><h3>DSR과 차이</h3><p>LTV는 담보가치 기준이고, DSR은 소득 대비 원리금 상환능력 기준입니다. 실제 대출한도는 두 기준을 비롯한 여러 규제를 함께 검토해야 합니다.</p></article>
       </div>
+      <LtvExamples/>
       <h2>자주 묻는 질문</h2>
       {LTV_FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
       <h2>계산 결과 유의사항</h2>
       <p className="hint">이 계산기는 참고용 간이 시뮬레이터입니다. 지역별·시기별 규제, 주택가격 산정 방식, DSR 및 스트레스 DSR, 대출금액 절대 상한, 선순위채권, 임차보증금·최우선변제금 공제(방공제), MCI·MCG 적용 여부, 금융기관별 심사와 상품 요건은 자동 반영하지 않습니다. 기존 담보대출 잔액은 동일 담보의 한도를 차감하는 것으로 단순 가정하며, 실제 선순위채권 인정액과 다를 수 있습니다. 보유 현금과 추가 한도를 합한 값은 실제 매수 가능 자금이나 대출 승인을 보장하지 않습니다.</p>
+      <UpdatedNote/>
     </section>
   </>;
 }

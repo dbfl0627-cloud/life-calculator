@@ -3,4 +3,5 @@ import {renderToString} from 'react-dom/server';
 import {App} from './App';
 export {ROUTES, SITE_URL} from './routes';
 export {FAQ, DSR_FAQ, LTV_FAQ} from './faq';
+export {INFO_UPDATED} from './Examples';
 export function render(path:string){ return renderToString(<React.StrictMode><App initialPath={path}/></React.StrictMode>); }

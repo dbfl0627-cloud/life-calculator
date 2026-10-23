@@ -30,3 +30,17 @@
 .hero.with-illust{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
 .hero-illust{width:100%;height:auto;display:block}
 @media(max-width:720px){.hero.with-illust{grid-template-columns:1fr;gap:28px}.hero-illust{max-width:420px}}
+
+/* 다른 계산기 안내, 404 */
+.related{padding:10px 0 70px}
+.related h2{font-size:24px;letter-spacing:-.03em;margin:0 0 6px}
+.related .lead{margin:0 0 20px}
+.hint a{color:#216baa;font-weight:700}
+.notfound{text-align:left}
+.notfound .about-tools{margin-top:26px}
+
+/* 예시 표·정보 기준일 */
+.example-table{background:#fff;border:1px solid #e5eaf0;border-radius:12px;margin:14px 0 10px}
+.example-table caption{caption-side:top;text-align:left;padding:14px 16px 4px;font-size:13px;font-weight:700;color:#60758c}
+.example-table td:first-child{font-weight:700;color:#2c3e55}
+.updated{margin-top:28px;font-size:13px;color:#7a8a9c}
