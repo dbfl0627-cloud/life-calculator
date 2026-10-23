@@ -9,7 +9,7 @@ export function calculateLoan(amount:number, annualRate:number, years:number, gr
     if(month>grace){
       const n=months-month+1;
       if(method==='equal-principal') principal=amount/repaymentMonths;
-      else principal=r===0?balance/n:balance*r/(1-Math.pow(1+r,-n));
+      else principal=r===0?balance/n:balance*r/(1-Math.pow(1+r,-n))-interest; // 원리금(월 납입액)에서 이자를 뺀 금액이 원금
       principal=Math.min(balance,principal);
       if(month===months) principal=balance;
     }
