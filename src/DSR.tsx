@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Calculator, Info, Wallet, TrendingDown } from 'lucide-react';
 import { DsrIllustration } from './Illustrations';
+import { DSR_FAQ } from './faq';
+import { koreanAmount } from './format';
 
 /** ZIPMOYA DSR 간이 계산기. 금액 입력 단위: 만원, 금리: 연 %. */
 const fmt = (value: number) => Math.round(value).toLocaleString('ko-KR');
@@ -91,9 +93,9 @@ export default function DSR() {
         <div className="panel">
           <h3><Wallet size={20}/> 대출 조건 입력</h3>
           <div className="fields">
-            <label>연소득 <small>만원</small><input type="number" min="1" value={income} onChange={e => setIncome(Number(e.target.value))}/></label>
-            <label>기존 대출 연간 원리금 <small>만원/년</small><input type="number" min="0" value={existingAnnual} onChange={e => setExistingAnnual(Number(e.target.value))}/></label>
-            <label>신규 대출 희망금액 <small>만원</small><input type="number" min="0" value={newLoan} onChange={e => setNewLoan(Number(e.target.value))}/></label>
+            <label>연소득 <small>만원</small><input type="number" min="1" value={income} onChange={e => setIncome(Number(e.target.value))} aria-describedby="dsr-income-kr"/><span id="dsr-income-kr" className="amount-korean" aria-live="polite">{koreanAmount(income)}</span></label>
+            <label>기존 대출 연간 원리금 <small>만원/년</small><input type="number" min="0" value={existingAnnual} onChange={e => setExistingAnnual(Number(e.target.value))} aria-describedby="dsr-existing-kr"/><span id="dsr-existing-kr" className="amount-korean" aria-live="polite">{koreanAmount(existingAnnual)}</span></label>
+            <label>신규 대출 희망금액 <small>만원</small><input type="number" min="0" value={newLoan} onChange={e => setNewLoan(Number(e.target.value))} aria-describedby="dsr-newloan-kr"/><span id="dsr-newloan-kr" className="amount-korean" aria-live="polite">{koreanAmount(newLoan)}</span></label>
             <label>신규 대출금리 <small>연 %</small><input type="number" min="0" step="0.1" value={rate} onChange={e => setRate(Number(e.target.value))}/></label>
             <label>대출기간 <small>년</small><select value={years} onChange={e => setYears(Number(e.target.value))}>{[10,15,20,25,30,35,40,45,50].map(y => <option value={y} key={y}>{y}년</option>)}</select></label>
             <label>적용 DSR 기준 <small>%</small><select value={limit} onChange={e => setLimit(Number(e.target.value))}><option value={40}>40%</option><option value={50}>50%</option></select></label>
@@ -141,6 +143,8 @@ export default function DSR() {
         <article><h3>계산식</h3><p>DSR(%) = (기존 대출 연간 원리금 + 신규 대출 연간 원리금) ÷ 연소득 × 100</p><p>월 원리금 = 대출원금 × r ÷ (1 − (1 + r)<sup>−n</sup>)<br/>r = 심사용 금리 ÷ 12, n = 대출기간(개월)</p></article>
         <article><h3>스트레스 DSR</h3><p>심사용 금리 = 대출금리 + 스트레스 금리 × 금리유형별 반영비율</p><p>스트레스 금리는 기본 1.5%p에 단계별 적용률을 곱합니다. 1단계 25%(0.38%p), 2단계 50%(0.75%p, 수도권 은행권 주담대 1.2%p), 3단계 100%(1.5%p, 수도권·규제지역 주담대 3.0%p).</p><p>금리 상승 위험을 반영해 한도를 계산할 때만 금리를 높여 잡는 제도입니다. 변동형은 100% 반영되고, 혼합형·주기형은 고정 기간이 길수록 반영비율이 낮아지며, 완전 고정형은 반영되지 않습니다.</p></article>
       </div>
+      <h2>자주 묻는 질문</h2>
+      {DSR_FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
       <h2>계산 결과 유의사항</h2>
       <p className="hint">이 도구는 신규 대출을 <strong>원리금균등상환</strong>으로 가정한 간이 시뮬레이터입니다. 기존 대출의 실제 DSR 인정 상환액, 신용대출 산정만기, 스트레스 DSR 세부 규정, DSR 예외 대출, LTV, 지역·상품별 한도, 금융기관 내부 심사 기준은 자동 반영하지 않습니다. 40%·50%는 선택 가능한 비교용 가정이며 실제 적용 기준을 뜻하지 않습니다. 표시된 한도는 대출 승인 또는 실제 가능 금액을 보장하지 않습니다.</p>
     </section>

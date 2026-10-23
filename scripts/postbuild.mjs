@@ -3,7 +3,7 @@
 import {mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
-const {render,ROUTES,SITE_URL,FAQ}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
+const {render,ROUTES,SITE_URL,FAQ,DSR_FAQ,LTV_FAQ}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
 const template=await readFile('dist/index.html','utf8');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const jsonLd=obj=>`<script type="application/ld+json">${JSON.stringify(obj).replace(/</g,'\\u003c')}</script>`;
@@ -14,12 +14,15 @@ const calcLd=[
 ];
 const dsrLd={'@context':'https://schema.org','@type':'WebApplication',name:'DSR 계산기',alternateName:['DSR 계산기','총부채원리금상환비율 계산기','대출한도 계산기'],url:SITE_URL+'/dsr/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/dsr/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
 const ltvLd={'@context':'https://schema.org','@type':'WebApplication',name:'LTV 계산기',alternateName:['LTV 계산기','주택담보인정비율 계산기','담보대출 한도 계산기'],url:SITE_URL+'/ltv/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/ltv/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
+const faqLd=list=>({'@context':'https://schema.org','@type':'FAQPage',mainEntity:list.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))});
 for(const [route,meta] of Object.entries(ROUTES)){
   const url=SITE_URL+meta.canonical;
   const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="ZIPMOYA"/><meta property="og:locale" content="ko_KR"/>`
+    +`<meta property="og:image" content="${SITE_URL}${meta.ogImage??'/og/default.png'}"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:alt" content="${esc(meta.title)}"/>`
+    +`<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(meta.title)}"/><meta name="twitter:description" content="${esc(meta.description)}"/><meta name="twitter:image" content="${SITE_URL}${meta.ogImage??'/og/default.png'}"/>`
     +(meta.canonical==='/'?calcLd.map(jsonLd).join(''):'')
-    +(route==='/dsr/'?jsonLd(dsrLd):'')
-    +(route==='/ltv/'?jsonLd(ltvLd):'');
+    +(route==='/dsr/'?jsonLd(dsrLd)+jsonLd(faqLd(DSR_FAQ)):'')
+    +(route==='/ltv/'?jsonLd(ltvLd)+jsonLd(faqLd(LTV_FAQ)):'');
   let html=template.replace(/<link rel="canonical"[^>]*>/,"")
     .replace(/<title>.*?<\/title>/,`<title>${esc(meta.title)}</title>${extraHead}`)
     .replace(/(<meta name="description" content=")[^"]*/,`$1${esc(meta.description)}`)

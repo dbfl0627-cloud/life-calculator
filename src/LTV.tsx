@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Calculator, Home, Info, TrendingDown, Wallet } from 'lucide-react';
 import { LtvIllustration } from './Illustrations';
+import { LTV_FAQ } from './faq';
+import { koreanAmount } from './format';
 
 /** ZIPMOYA LTV 간이 계산기. 금액 단위: 만원. */
 const fmt = (n: number) => Math.round(n).toLocaleString('ko-KR');
@@ -63,7 +65,7 @@ export default function LTV() {
           <h3><Wallet size={20}/> 주택 및 대출 조건 입력</h3>
           <div className="fields">
             <label>주택가격 / 담보평가액 <small>만원</small>
-              <input type="number" min="1" step="100" value={homePrice} onChange={e => setHomePrice(Number(e.target.value))}/>
+              <input type="number" min="1" step="100" value={homePrice} onChange={e => setHomePrice(Number(e.target.value))} aria-describedby="ltv-price-kr"/><span id="ltv-price-kr" className="amount-korean" aria-live="polite">{koreanAmount(homePrice)}</span>
             </label>
             <label>적용 LTV 비율 <small>%</small>
               <select value={ltvPercent} onChange={e => setLtvPercent(Number(e.target.value))}>
@@ -71,10 +73,10 @@ export default function LTV() {
               </select>
             </label>
             <label>기존 담보대출 잔액 <small>만원</small>
-              <input type="number" min="0" step="100" value={existingLoan} onChange={e => setExistingLoan(Number(e.target.value))}/>
+              <input type="number" min="0" step="100" value={existingLoan} onChange={e => setExistingLoan(Number(e.target.value))} aria-describedby="ltv-existing-kr"/><span id="ltv-existing-kr" className="amount-korean" aria-live="polite">{koreanAmount(existingLoan)}</span>
             </label>
             <label>보유 현금 <small>만원</small>
-              <input type="number" min="0" step="100" value={ownFunds} onChange={e => setOwnFunds(Number(e.target.value))}/>
+              <input type="number" min="0" step="100" value={ownFunds} onChange={e => setOwnFunds(Number(e.target.value))} aria-describedby="ltv-funds-kr"/><span id="ltv-funds-kr" className="amount-korean" aria-live="polite">{koreanAmount(ownFunds)}</span>
             </label>
           </div>
           <p className="hint"><Info size={13} style={{ verticalAlign: 'middle' }}/> LTV 비율은 지역·주택·차주·대출 목적·상품에 따라 달라질 수 있습니다. 실제 적용 비율을 확인하여 선택하세요.</p>
@@ -112,6 +114,8 @@ export default function LTV() {
         <article><h3>계산식</h3><p>담보가치 기준 한도 = 주택가격 × LTV 비율. 추가 한도 = 최대(0, 담보한도 − 기존 담보대출 잔액).</p></article>
         <article><h3>DSR과 차이</h3><p>LTV는 담보가치 기준이고, DSR은 소득 대비 원리금 상환능력 기준입니다. 실제 대출한도는 두 기준을 비롯한 여러 규제를 함께 검토해야 합니다.</p></article>
       </div>
+      <h2>자주 묻는 질문</h2>
+      {LTV_FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
       <h2>계산 결과 유의사항</h2>
       <p className="hint">이 계산기는 참고용 간이 시뮬레이터입니다. 지역별·시기별 규제, 주택가격 산정 방식, DSR 및 스트레스 DSR, 대출금액 절대 상한, 선순위채권, 임차보증금·최우선변제금 공제(방공제), MCI·MCG 적용 여부, 금융기관별 심사와 상품 요건은 자동 반영하지 않습니다. 기존 담보대출 잔액은 동일 담보의 한도를 차감하는 것으로 단순 가정하며, 실제 선순위채권 인정액과 다를 수 있습니다. 보유 현금과 추가 한도를 합한 값은 실제 매수 가능 자금이나 대출 승인을 보장하지 않습니다.</p>
     </section>
