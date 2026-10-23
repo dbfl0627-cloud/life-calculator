@@ -13,11 +13,13 @@ const calcLd=[
   {'@context':'https://schema.org','@type':'FAQPage',mainEntity:FAQ.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))},
 ];
 const dsrLd={'@context':'https://schema.org','@type':'WebApplication',name:'DSR 계산기',alternateName:['DSR 계산기','총부채원리금상환비율 계산기','대출한도 계산기'],url:SITE_URL+'/dsr/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/dsr/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
+const ltvLd={'@context':'https://schema.org','@type':'WebApplication',name:'LTV 계산기',alternateName:['LTV 계산기','주택담보인정비율 계산기','담보대출 한도 계산기'],url:SITE_URL+'/ltv/',applicationCategory:'FinanceApplication',operatingSystem:'All',inLanguage:'ko',description:ROUTES['/ltv/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
 for(const [route,meta] of Object.entries(ROUTES)){
   const url=SITE_URL+meta.canonical;
   const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="ZIPMOYA"/><meta property="og:locale" content="ko_KR"/>`
     +(meta.canonical==='/'?calcLd.map(jsonLd).join(''):'')
-    +(route==='/dsr/'?jsonLd(dsrLd):'');
+    +(route==='/dsr/'?jsonLd(dsrLd):'')
+    +(route==='/ltv/'?jsonLd(ltvLd):'');
   let html=template.replace(/<link rel="canonical"[^>]*>/,"")
     .replace(/<title>.*?<\/title>/,`<title>${esc(meta.title)}</title>${extraHead}`)
     .replace(/(<meta name="description" content=")[^"]*/,`$1${esc(meta.description)}`)
