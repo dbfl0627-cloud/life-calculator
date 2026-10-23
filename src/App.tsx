@@ -23,7 +23,7 @@ export function App({initialPath}:{initialPath:string}){
  const rows=useMemo(()=>{try{return calculateLoan(amount*10000,rate,years,grace,method)}catch{return []}},[amount,rate,years,grace,method]);
  const totalInterest=rows.reduce((s,r)=>s+r.interest,0),total=rows.reduce((s,r)=>s+r.payment,0);
  const firstRepayment=rows.find(r=>!r.grace)?.payment??0;
- return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a><a {...navLink('/about/')}>소개</a></nav></div></header>
+ return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a></nav></div></header>
  <main className="wrap">
  {page==='/about/'?<About link={link}/>:
  page==='/privacy/'?<Privacy/>:
