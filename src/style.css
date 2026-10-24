@@ -74,3 +74,11 @@
 .map-pin:hover{background:#216baa}
 .map-active{margin-top:8px;padding:10px 12px;background:#f4f8fc;border-radius:10px;font-size:13px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .map-active span{color:#65768b}
+
+/* 구매 가능/불가능 판정 */
+.verdict{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;margin-bottom:18px;border:1px solid}
+.verdict b{font-size:20px;letter-spacing:-.02em}
+.verdict span{font-size:13px;line-height:1.6}
+.verdict.yes{background:#eaf7ef;border-color:#9fd8b4;color:#17663a}
+.verdict.no{background:#fdecec;border-color:#f3a9a9;color:#c62828}
+.main-result.short strong{color:#c62828}

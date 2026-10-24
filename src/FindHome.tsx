@@ -262,7 +262,12 @@ export default function FindHome() {
         <div className="panel result">
           <h3><TrendingDown size={20}/> 필요 자금</h3>
           {!want ? <p role="alert">아파트 가격과 입력 금액을 확인해 주세요.</p> : <>
-            <div className="main-result"><span>{want.shortage > 0 ? '보유 현금 외에 더 필요한 자금' : '보유 현금으로 충분합니다'}</span><strong>{want.shortage > 0 ? kr(want.shortage) : '0원'}</strong><span>필요 자금 {kr(want.need)} − 보유 현금 {kr(cash)}</span></div>
+            <div className={`verdict ${want.shortage > 0 ? 'no' : 'yes'}`} role="status">
+              {want.shortage > 0
+                ? <><b>구매 불가능</b><span>보유 현금과 대출을 합쳐도 {kr(want.shortage)}이 부족합니다.</span></>
+                : <><b>구매 가능</b><span>보유 현금과 대출로 살 수 있습니다. 남는 현금 약 {kr(cash - want.need)}</span></>}
+            </div>
+            <div className={`main-result${want.shortage > 0 ? ' short' : ''}`}><span>{want.shortage > 0 ? '보유 현금 외에 더 필요한 자금' : '보유 현금으로 충분합니다'}</span><strong>{want.shortage > 0 ? kr(want.shortage) : '0원'}</strong><span>필요 자금 {kr(want.need)} − 보유 현금 {kr(cash)}</span></div>
             <div className="stats">
               <div><span>대출 가능액 ({want.binding} 기준)</span><strong>{kr(want.loan)}</strong></div>
               <div><span>월 상환액 (원리금균등)</span><strong>{fmt(want.monthly)}만원</strong></div>
