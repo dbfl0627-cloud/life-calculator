@@ -134,3 +134,26 @@ export function NotFoundIllustration() {
     <rect x="238" y="238" width="22" height="8" rx="4" fill="#0b2545" transform="rotate(45 240 240)"/>
   </Frame>;
 }
+
+/** 내 집 찾기: 지도 위 핀과 아파트 */
+export function FindHomeIllustration() {
+  return <Frame id="illust-findhome" title="지도 위에 아파트와 위치 핀을 표현한 내 집 찾기 일러스트">
+    {/* 지도 */}
+    <path d="M40 70 L140 50 L250 74 L380 52 L380 236 L250 258 L140 234 L40 254 Z" fill="#fff" stroke="#c9d9ea" strokeWidth="2"/>
+    <path d="M140 50 V234 M250 74 V258" stroke="#e1eaf3" strokeWidth="2"/>
+    <path d="M40 170 C110 150 170 200 250 170 S350 140 380 150" stroke="#d4e5f4" strokeWidth="10" fill="none" strokeLinecap="round"/>
+    {/* 아파트들 */}
+    {[[70, 120, 34, 70], [112, 100, 30, 90], [270, 112, 36, 78], [314, 132, 30, 58]].map(([x, y, w, h], i) =>
+      <g key={i}>
+        <rect x={x} y={y} width={w} height={h} rx="4" fill={i % 2 ? '#4f93cf' : '#216baa'}/>
+        {Array.from({ length: Math.floor((h - 12) / 14) }).map((_, r) => <rect key={r} x={x + 7} y={y + 8 + r * 14} width={w - 14} height="6" rx="2" fill="#e8f3ff" opacity=".8"/>)}
+      </g>)}
+    {/* 핀 */}
+    <g transform="translate(196 78)">
+      <path d="M0 0 C-26 0 -38 22 -30 42 L0 92 L30 42 C38 22 26 0 0 0 Z" fill="#f2c14e"/>
+      <circle cx="0" cy="32" r="13" fill="#fff"/>
+      <path d="M-7 34 L0 27 L7 34 V40 H-7 Z" fill="#0b2545"/>
+    </g>
+    <ellipse cx="196" cy="176" rx="18" ry="5" fill="#0b2545" opacity=".15"/>
+  </Frame>;
+}

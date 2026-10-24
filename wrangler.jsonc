@@ -1,8 +1,13 @@
 {
   "name": "life-calculator",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-10-22",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // /api/* 는 Worker가 먼저 처리, 나머지는 정적 파일
+    "run_worker_first": ["/api/*"]
   }
+  // 공공데이터포털 인증키는 Cloudflare 대시보드 > Worker > 설정 > 변수 및 비밀(Secret)에 DATA_GO_KR_KEY 로 등록
 }

@@ -7,6 +7,7 @@ import {FAQ} from './faq';
 import {Privacy} from './Privacy';
 import DSR from './DSR';
 import LTV from './LTV';
+import FindHome from './FindHome';
 import {About} from './About';
 import {MortgageIllustration} from './Illustrations';
 import {RelatedTools, NotFound} from './RelatedTools';
@@ -29,13 +30,14 @@ export function App({initialPath}:{initialPath:string}){
  const rows=useMemo(()=>{try{return calculateLoan(amount*10000,rate,years,grace,method)}catch{return []}},[amount,rate,years,grace,method]);
  const totalInterest=rows.reduce((s,r)=>s+r.interest,0),total=rows.reduce((s,r)=>s+r.payment,0);
  const firstRepayment=rows.find(r=>!r.grace)?.payment??0;
- return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a></nav></div></header>
+ return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/find-home/')}>내 집 찾기</a><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a></nav></div></header>
  <main className="wrap" onClick={onMainClick}>
  {!isKnown?<NotFound link={link}/>:
  page==='/about/'?<About link={link}/>:
  page==='/privacy/'?<Privacy/>:
  page==='/dsr/'?<DSR/>:
  page==='/ltv/'?<LTV/>:
+ page==='/find-home/'?<FindHome/>:
  <><section className="hero with-illust"><div><span className="eyebrow"><ShieldCheck size={15}/> ZIPMOYA LOAN CALCULATOR</span><h1>주택담보대출 계산기<br/><em>주담대 월 상환액, 한눈에.</em></h1><p>대출금액, 금리, 상환기간을 입력하면 주택담보대출 월 납입액부터 총 이자까지 바로 확인할 수 있어요.</p><button className="primary" onClick={()=>document.getElementById('calculator')?.scrollIntoView({behavior:'smooth'})}>지금 계산하기 <ChevronRight size={18}/></button></div><MortgageIllustration/></section>
  <section className="section" id="calculator"><div className="section-heading"><div><span className="eyebrow">MORTGAGE CALCULATOR</span><h2>주택담보대출(주담대) 계산기</h2><p>거치기간과 원리금균등·원금균등 상환방식까지 반영한 주담대 예상 납입액을 계산합니다.</p></div></div>
  <div className="calculator-grid"><div className="panel"><h3><Wallet size={20}/> 대출 조건 입력</h3><div className="fields"><label>대출금액 <small>만원</small><input type="number" min="1" value={amount} onChange={e=>setAmount(Number(e.target.value))} aria-describedby="amount-korean"/><span id="amount-korean" className="amount-korean" aria-live="polite">{koreanAmount(amount)}</span></label><label>연 이자율 <small>%</small><input type="number" min="0" max="100" step="0.1" value={rate} onChange={e=>setRate(Number(e.target.value))}/></label><label>대출기간 <small>년</small><select value={years} onChange={e=>{const y=Number(e.target.value);setYears(y);if(grace>=y)setGrace(0)}}>{[10,15,20,25,30,35,40,45,50].map(n=><option key={n} value={n}>{n}년</option>)}</select></label><label>거치기간 <small>년</small><select value={grace} onChange={e=>setGrace(Number(e.target.value))}>{Array.from({length:years},(_,i)=>i).map(n=><option key={n} value={n}>{n}년</option>)}</select></label></div><div className="method"><span>상환 방식</span><div className="seg"><button className={method==='equal-payment'?'active':''} onClick={()=>setMethod('equal-payment')}>원리금균등</button><button className={method==='equal-principal'?'active':''} onClick={()=>setMethod('equal-principal')}>원금균등</button></div></div><p className="hint">거치기간에는 이자만 납부하며, 거치 종료 후 남은 기간에 원금을 상환합니다.</p></div>

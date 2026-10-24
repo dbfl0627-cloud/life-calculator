@@ -9,6 +9,7 @@ export const ROUTES: Record<string, RouteMeta> = {
   '/mortgage/': { title:CALC_TITLE, description:CALC_DESC, canonical:'/', inSitemap:false },
   '/dsr/': { title:'DSR 계산기 - 연봉으로 대출한도 계산 | ZIPMOYA', description:'연소득과 기존 대출 상환액을 입력하면 DSR(총부채원리금상환비율)과 신규 대출 가능액을 바로 계산합니다. 스트레스 금리와 DSR 40%·50% 기준 비교까지 무료로 확인하세요.', canonical:'/dsr/', inSitemap:true, ogImage:'/og/dsr.png' },
   '/ltv/': { title:'LTV 계산기 - 집값으로 담보대출 한도 계산 | ZIPMOYA', description:'주택가격과 LTV 비율을 입력하면 담보가치 기준 주택담보대출 한도, 기존 대출 차감 후 추가 한도, 부족 자금을 바로 계산합니다. 무료 LTV 계산기.', canonical:'/ltv/', inSitemap:true, ogImage:'/og/ltv.png' },
+  '/find-home/': { title:'내 집 찾기 - 내 연봉으로 살 수 있는 아파트 가격 계산 | ZIPMOYA', description:'연봉, 기존 대출, 보유 현금을 입력하면 DSR·LTV·대출 상한을 반영해 살 수 있는 아파트 최대 가격과 사고 싶은 아파트의 대출 가능액, 필요 자금, 취득세를 계산합니다.', canonical:'/find-home/', inSitemap:true },
   '/about/': { title:'ZIPMOYA(집모야) 소개 | ZIPMOYA', description:'ZIPMOYA(집모야)는 주담대 계산기, DSR 계산기, LTV 계산기 등 집과 부동산 대출에 관한 무료 계산 도구와 정보를 제공합니다.', canonical:'/about/', inSitemap:true },
   '/privacy/': { title:'개인정보처리방침 | ZIPMOYA', description:'ZIPMOYA의 개인정보 처리 방침입니다. 계산 입력값은 브라우저에서만 처리됩니다.', canonical:'/privacy/', inSitemap:true },
 };
