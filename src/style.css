@@ -24,7 +24,7 @@
 .about-principles svg{color:#216baa}
 .about-principles strong{font-size:15px}
 .about-principles p{margin:0}
-@media(max-width:720px){.about-hero{grid-template-columns:1fr;gap:20px}.about-tools,.about-principles{grid-template-columns:1fr}.head{height:auto;flex-wrap:wrap;row-gap:4px;padding-top:12px;padding-bottom:2px}nav{width:100%;gap:20px;overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav a{font-size:13px}}
+@media(max-width:720px){.about-hero{grid-template-columns:1fr;gap:20px}.about-tools,.about-principles{grid-template-columns:1fr}.head{height:auto;flex-wrap:wrap;row-gap:4px;padding-top:12px;padding-bottom:2px}nav{width:100%;gap:12px;overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav a{font-size:12.5px;letter-spacing:-.02em}}
 
 /* 계산기 페이지 상단 일러스트 */
 .hero.with-illust{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
@@ -82,3 +82,28 @@
 .verdict.yes{background:#eaf7ef;border-color:#9fd8b4;color:#17663a}
 .verdict.no{background:#fdecec;border-color:#f3a9a9;color:#c62828}
 .main-result.short strong{color:#c62828}
+
+/* 가이드 */
+.guide-list h1,.guide h1{font-size:clamp(26px,3.6vw,38px);letter-spacing:-.04em;line-height:1.35;margin:10px 0 12px}
+.article.guide-list{max-width:1120px}
+.guide-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:26px}
+.guide-card{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid #e5eaf0;border-radius:14px;padding:22px;text-decoration:none;color:#172a43;transition:border-color .15s,box-shadow .15s}
+.guide-card:hover{border-color:#8bb9e2;box-shadow:0 6px 22px #142e4910}
+.guide-card strong{font-size:17px;line-height:1.5}
+.guide-card p{margin:0;flex:1}
+.guide-tag{align-self:flex-start;font-size:12px;font-weight:700;color:#216baa;background:#e8f3ff;border-radius:6px;padding:3px 8px}
+.breadcrumb{display:flex;align-items:center;gap:4px;font-size:13px;color:#7a8a9c}
+.breadcrumb a{color:#216baa;text-decoration:none;font-weight:700}
+.guide-meta{font-size:13px!important;color:#8190a1!important;margin:0}
+.guide-summary{font-size:16px!important;color:#3b4f66!important;border-left:4px solid #216baa;padding-left:14px;margin:22px 0}
+.guide-body h2{font-size:21px;letter-spacing:-.03em;margin:38px 0 10px}
+.guide-body p,.guide-body li{font-size:15px;color:#3b4f66;line-height:1.95}
+.guide-body ul{padding-left:20px}
+.guide-body strong{color:#172a43}
+.guide-tip{background:#f4f8fc;border-radius:12px;padding:16px 18px;margin:22px 0}
+.guide-sub{font-size:19px;margin:40px 0 12px}
+.guide-tools{display:flex;flex-wrap:wrap;gap:10px}
+.guide-tools .primary{margin:0;text-decoration:none;color:#fff;padding:12px 18px}
+.guide-others{padding-left:20px}
+.guide-others li{font-size:14px;line-height:2}
+@media(max-width:720px){.guide-cards{grid-template-columns:1fr}}

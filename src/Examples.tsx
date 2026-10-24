@@ -6,21 +6,21 @@ import { koreanAmount } from './format';
  */
 export const INFO_UPDATED = '2026-10-24';
 export const INFO_UPDATED_LABEL = '2026년 10월 24일';
-const RATE = 4.0;
+export const RATE = 4.0;
 
 /** 원리금균등 월 상환액(만원) */
-function payment(principal: number, annualRate: number, years: number) {
+export function payment(principal: number, annualRate: number, years: number) {
   const n = years * 12, r = annualRate / 1200;
   return r === 0 ? principal / n : principal * r / (1 - Math.pow(1 + r, -n));
 }
 /** 월 상환 가능액 → 원리금균등 대출원금(만원) */
-function principalFrom(monthly: number, annualRate: number, years: number) {
+export function principalFrom(monthly: number, annualRate: number, years: number) {
   const n = years * 12, r = annualRate / 1200;
   return r === 0 ? monthly * n : monthly * (1 - Math.pow(1 + r, -n)) / r;
 }
-const won = (man: number) => Math.round(man * 10000).toLocaleString('ko-KR') + '원';
+export const won = (man: number) => Math.round(man * 10000).toLocaleString('ko-KR') + '원';
 /** 만원 단위를 100만원 단위로 내림해 "약 3억 2천만원"처럼 표시 */
-const approx = (man: number) => '약 ' + koreanAmount(Math.floor(man / 100) * 100);
+export const approx = (man: number) => '약 ' + koreanAmount(Math.floor(man / 100) * 100);
 
 export function UpdatedNote() {
   return <p className="updated">정보 기준일: <time dateTime={INFO_UPDATED}>{INFO_UPDATED_LABEL}</time></p>;

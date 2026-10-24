@@ -3,7 +3,7 @@
 import {mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
-const {render,ROUTES,SITE_URL,FAQ,DSR_FAQ,LTV_FAQ,INFO_UPDATED}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
+const {render,ROUTES,SITE_URL,FAQ,DSR_FAQ,LTV_FAQ,INFO_UPDATED,GUIDE_META}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
 const template=await readFile('dist/index.html','utf8');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const jsonLd=obj=>`<script type="application/ld+json">${JSON.stringify(obj).replace(/</g,'\\u003c')}</script>`;
@@ -15,6 +15,14 @@ const calcLd=[
 const dsrLd={'@context':'https://schema.org','@type':'WebApplication',name:'DSR 계산기',alternateName:['DSR 계산기','총부채원리금상환비율 계산기','대출한도 계산기'],url:SITE_URL+'/dsr/',applicationCategory:'FinanceApplication',dateModified:INFO_UPDATED,operatingSystem:'All',inLanguage:'ko',description:ROUTES['/dsr/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
 const ltvLd={'@context':'https://schema.org','@type':'WebApplication',name:'LTV 계산기',alternateName:['LTV 계산기','주택담보인정비율 계산기','담보대출 한도 계산기'],url:SITE_URL+'/ltv/',applicationCategory:'FinanceApplication',dateModified:INFO_UPDATED,operatingSystem:'All',inLanguage:'ko',description:ROUTES['/ltv/'].description,offers:{'@type':'Offer',price:'0',priceCurrency:'KRW'}};
 const faqLd=list=>({'@context':'https://schema.org','@type':'FAQPage',mainEntity:list.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))});
+// 가이드 글: Article + 경로(Breadcrumb) 구조화 데이터
+const guideLd=route=>{
+  const g=GUIDE_META.find(x=>route===`/guide/${x.slug}/`);
+  if(!g) return '';
+  const url=`${SITE_URL}${route}`;
+  return jsonLd({'@context':'https://schema.org','@type':'Article',headline:g.title,description:g.description,datePublished:g.date,dateModified:g.updated??g.date,inLanguage:'ko',mainEntityOfPage:url,image:`${SITE_URL}/og/default.png`,author:{'@type':'Organization',name:'ZIPMOYA',url:SITE_URL+'/'},publisher:{'@type':'Organization',name:'ZIPMOYA',logo:{'@type':'ImageObject',url:`${SITE_URL}/apple-touch-icon.png`}}})
+    +jsonLd({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'가이드',item:`${SITE_URL}/guide/`},{'@type':'ListItem',position:2,name:g.title,item:url}]});
+};
 for(const [route,meta] of Object.entries(ROUTES)){
   const url=SITE_URL+meta.canonical;
   const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="ZIPMOYA"/><meta property="og:locale" content="ko_KR"/>`
@@ -22,7 +30,8 @@ for(const [route,meta] of Object.entries(ROUTES)){
     +`<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(meta.title)}"/><meta name="twitter:description" content="${esc(meta.description)}"/><meta name="twitter:image" content="${SITE_URL}${meta.ogImage??'/og/default.png'}"/>`
     +(meta.canonical==='/'?calcLd.map(jsonLd).join(''):'')
     +(route==='/dsr/'?jsonLd(dsrLd)+jsonLd(faqLd(DSR_FAQ)):'')
-    +(route==='/ltv/'?jsonLd(ltvLd)+jsonLd(faqLd(LTV_FAQ)):'');
+    +(route==='/ltv/'?jsonLd(ltvLd)+jsonLd(faqLd(LTV_FAQ)):'')
+    +guideLd(route);
   let html=template.replace(/<link rel="canonical"[^>]*>/,"")
     .replace(/<title>.*?<\/title>/,`<title>${esc(meta.title)}</title>${extraHead}`)
     .replace(/(<meta name="description" content=")[^"]*/,`$1${esc(meta.description)}`)
@@ -49,6 +58,10 @@ await writeFile('dist/llms.txt',`# ZIPMOYA (집모야)
 - [주담대 계산기](${SITE_URL}/): 대출금액·금리·기간·거치기간으로 원리금균등/원금균등 월 상환액, 총 이자, 월별 상환표 계산. 대출금액·기간별 월 상환액 예시 표 포함.
 - [DSR 계산기](${SITE_URL}/dsr/): 연소득과 기존 대출 원리금으로 DSR 비율과 신규 대출한도 계산. 스트레스 DSR 1~3단계, 지역·금리유형별 반영비율, 연봉별 DSR 40% 한도 예시 표 포함.
 - [LTV 계산기](${SITE_URL}/ltv/): 주택가격과 LTV 비율로 담보가치 기준 대출한도, 기존 대출 차감 후 추가 한도, 부족 자금 계산. 집값별 LTV 한도 예시 표 포함.
+
+## 가이드
+- [내 집 마련 대출·자금 가이드 목록](${SITE_URL}/guide/)
+${GUIDE_META.map(g=>`- [${g.title}](${SITE_URL}/guide/${g.slug}/): ${g.description}`).join('\n')}
 
 ## 안내
 - [사이트 소개](${SITE_URL}/about/)
