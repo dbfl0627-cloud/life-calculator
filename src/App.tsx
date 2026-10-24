@@ -24,6 +24,8 @@ export function App({initialPath}:{initialPath:string}){
  const navLink=(p:string)=>({...link(p),className:current===p?'active':undefined,'aria-current':current===p?'page' as const:undefined});
  // 본문 안의 일반 <a href="/..."> 링크도 페이지 새로고침 없이 이동
  const onMainClick=(e:React.MouseEvent)=>{const a=(e.target as HTMLElement).closest('a');if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.target)return;const href=a.getAttribute('href');if(href&&href.startsWith('/')&&!href.startsWith('//')){e.preventDefault();go(href)}};
+ // 숫자 칸에서 '0'이 있는 채로 입력하면 '013'처럼 앞의 0이 남는 문제: 입력 직후 앞자리 0을 지움 (0.5 같은 소수는 유지)
+ const stripLeadingZeros=(e:React.FormEvent)=>{const el=e.target as HTMLInputElement;if(el.type!=='number')return;const v=el.value.replace(/^(-?)0+(?=\d)/,'$1');if(v!==el.value)el.value=v};
  const isKnown=page in ROUTES;
  const link=(p:string)=>({href:p,onClick:(e:React.MouseEvent)=>{e.preventDefault();go(p)}});
  const go=(p:string)=>{history.pushState(null,'',p);setPage(p);applyMeta(p);scrollTo(0,0)};
@@ -32,7 +34,7 @@ export function App({initialPath}:{initialPath:string}){
  const totalInterest=rows.reduce((s,r)=>s+r.interest,0),total=rows.reduce((s,r)=>s+r.payment,0);
  const firstRepayment=rows.find(r=>!r.grace)?.payment??0;
  return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/find-home/')}>내 집 찾기</a><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a><a {...navLink('/guide/')} className={current.startsWith('/guide/')?'active':undefined}>가이드</a></nav></div></header>
- <main className="wrap" onClick={onMainClick}>
+ <main className="wrap" onClick={onMainClick} onInputCapture={stripLeadingZeros}>
  {!isKnown?<NotFound link={link}/>:
  page==='/about/'?<About link={link}/>:
  page==='/privacy/'?<Privacy/>:

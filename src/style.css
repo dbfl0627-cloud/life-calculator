@@ -122,3 +122,37 @@
 .guide-thumb svg>rect:first-of-type{rx:0}
 .guide-hero{margin:22px 0 4px;border-radius:16px;overflow:hidden;max-width:560px}
 .guide-hero svg{width:100%;height:auto;display:block}
+
+/* 본문 소제목 간격 통일: 계산 방법·예시·자주 묻는 질문·유의사항 모두 같은 간격 */
+.content h2{margin:42px 0 12px}
+.content h2:first-child{margin-top:8px}
+/* 본문 안 안내 문단(유의사항·표 아래 설명)도 본문과 같은 글자 크기·행간 */
+.content>.hint{font-size:14px;line-height:1.9;color:#65768b}
+
+/* 내 집 찾기 탭1 */
+.more-opts{margin-top:18px;border:1px solid #e1eaf3;border-radius:10px;padding:12px 14px;background:#fafcfe}
+.more-opts summary{font-size:13px;font-weight:700;color:#216baa;cursor:pointer}
+.more-opts .fields{margin-top:14px}
+.region-badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#2c3e55;background:#e8f3ff;border-radius:20px;padding:6px 12px;margin-bottom:16px}
+.region-badge b{color:#0b4e8b}
+.budget-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.budget-steps li{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:1px solid #e4ebf3;border-radius:12px;background:#fff}
+.budget-steps span{font-size:12px;color:#687d91;font-weight:700}
+.budget-steps strong{font-size:20px;color:#0b2545;letter-spacing:-.02em}
+.budget-steps em{font-style:normal;font-size:12px;color:#7a8a9c;line-height:1.6}
+.budget-steps li.big{border-color:#8bb9e2;background:#f4f9ff}
+.budget-steps li.big strong{font-size:clamp(26px,3.4vw,34px);color:#0b4e8b}
+
+.budget-steps em b{color:#0b4e8b}
+.budget-note{margin:12px 0 0;padding:12px 14px;border-radius:10px;background:#fff8e6;border:1px solid #f2d58a;font-size:13px;color:#6b5210;line-height:1.7}
+.budget-note b{color:#0b2545}
+
+.loan-check{margin:14px 0}
+.loan-check ul{margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
+.choice{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.choice button{border:1px solid #f3a9a9;background:#fff;color:#c62828;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700}
+.choice button.on{background:#c62828;color:#fff;border-color:#c62828}
+.budget-steps li.forced{border-color:#f3a9a9;background:#fff6f6}
+.budget-steps li.forced strong{color:#c62828}
+
+.budget-steps em.ltv-why{margin-top:4px;padding-top:6px;border-top:1px dashed #e1eaf3}

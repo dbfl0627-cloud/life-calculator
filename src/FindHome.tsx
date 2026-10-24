@@ -61,6 +61,11 @@ const SIDO = Object.keys(SGG_MAP);
 const sggOf = (sido: string) => SGG_MAP[sido] ?? [];
 /** 시도 → 지역 구분 기본값 (서울은 전역 규제지역, 경기·인천은 수도권 비규제로 두고 필요하면 직접 변경) */
 const regionOfSido = (sido: string): Region => sido === '서울특별시' ? 'regulated' : (sido === '경기도' || sido === '인천광역시') ? 'capital' : 'local';
+/** 2025.10.15 대책 기준 경기도 규제지역(시군구 코드). 서울은 전역 규제지역. 지정이 바뀌면 여기만 수정하세요. */
+const REGULATED_GG = new Set(['41290', '41210', '41131', '41133', '41135', '41111', '41115', '41117', '41173', '41465', '41430', '41450']);
+const regionOf = (sido: string, lawd: string): Region => sido === '서울특별시' || REGULATED_GG.has(lawd) ? 'regulated' : regionOfSido(sido);
+/** 지역·생애최초 여부별 LTV 대표값(%) */
+const ltvFor = (r: Region, firstTime: boolean) => firstTime ? (r === 'local' ? 80 : 70) : REGIONS[r].ltv;
 const pyeong = (m2: number) => Math.round(m2 / 3.3058);
 const sggName = (sido: string, lawd: string) => sggOf(sido).find(([c]) => c === lawd)?.[1] ?? '';
 /** 실거래가 단지 → 지도 표시용 항목 (지번 주소로 좌표 변환, 실패 시 '동 + 단지명' 키워드 검색) */
@@ -120,7 +125,10 @@ export default function FindHome() {
   const [region, setRegion] = useState<Region>('regulated');
   const [ltv, setLtv] = useState<number>(REGIONS.regulated.ltv);
   const [stress, setStress] = useState<number>(REGIONS.regulated.stress);
-  const [manualLoan, setManualLoan] = useState(0);
+  const [firstTime, setFirstTime] = useState(false);
+  const [wantLoan, setWantLoan] = useState(0);   // 탭1: 희망 대출금액 (0이면 받을 수 있는 최대로 계산)
+  // 한도를 넘는 희망 대출을 '그래도' 쓰기로 고른 입력 조합. 조건이 바뀌면 자동으로 해제됨
+  const [forcedKey, setForcedKey] = useState('');
   const [price, setPrice] = useState(0); // 아파트를 고르거나 직접 입력하기 전에는 결과를 보여주지 않음
   const [over85, setOver85] = useState(false);
   const [sido, setSido] = useState('');
@@ -130,7 +138,8 @@ export default function FindHome() {
   const [aptQuery, setAptQuery] = useState('');
   const aptState = useApts(lawd);
   const onSido = (s: string) => { setSido(s); setLawd(''); setAptKey(''); setArea(''); if (s) changeRegion(regionOfSido(s)); };
-  const onLawd = (c: string) => { setLawd(c); setAptKey(''); setArea(''); setAptQuery(''); };
+  const onFirstTime = (v: boolean) => { setFirstTime(v); setLtv(ltvFor(region, v)); };
+  const onLawd = (c: string) => { setLawd(c); setAptKey(''); setArea(''); setAptQuery(''); if (c) changeRegion(regionOf(sido, c)); };
   const aptId = (a: Apt) => `${a.dong}|${a.jibun}|${a.name}`;
   const selectedApt = aptState.apts.find(a => aptId(a) === aptKey);
   const selectedType = selectedApt?.types.find(t => String(t.area) === area);
@@ -142,17 +151,29 @@ export default function FindHome() {
   // 검색어로 거르되, 이미 고른 아파트는 목록에 남겨 둠
   const filteredApts = aptState.apts.filter(a => !aptQuery || aptId(a) === aptKey || a.name.includes(aptQuery.trim()) || a.dong.includes(aptQuery.trim()));
 
-  function changeRegion(r: Region) { setRegion(r); setLtv(REGIONS[r].ltv); setStress(REGIONS[r].stress); }
+  function changeRegion(r: Region) { setRegion(r); setLtv(ltvFor(r, firstTime)); setStress(REGIONS[r].stress); }
   const inputs: Inputs = { income, existingAnnual, cash, rate, years, region, ltv, stress, dsrLimit: 40 };
-  const valid = [income, existingAnnual, cash, rate, ltv, stress, manualLoan, price].every(n => Number.isFinite(n) && n >= 0) && income > 0;
+  const valid = [income, existingAnnual, cash, rate, ltv, stress, price].every(n => Number.isFinite(n) && n >= 0) && income > 0;
 
-  const canBuy = useMemo(() => {
-    if (!valid) return null;
-    const auto = maxPrice(inputs);
-    const manual = manualLoan > 0 ? cash + manualLoan : 0;
-    const top = manual || auto;
-    return { auto, manual, top, detail: limits(inputs, top) };
-  }, [income, existingAnnual, cash, rate, years, region, ltv, stress, manualLoan, valid]);
+  /**
+   * 탭1: 최대 대출은 '지역 대출 상한'만으로 정합니다(LTV는 참고로 표시만).
+   * 규제지역은 집값 구간별 상한이 달라서, 현금 + 대출 = 집값이 그 구간 상한을 넘지 않는 가장 큰 대출을 찾습니다.
+   */
+  const forceKey = [wantLoan, cash, lawd, region].join('|');
+  const force = forcedKey === forceKey;
+  const setForce = (v: boolean) => setForcedKey(v ? forceKey : '');
+  const buy = useMemo(() => {
+    if (![cash, wantLoan].every(n => Number.isFinite(n) && n >= 0)) return null;
+    const hasCap = Number.isFinite(loanCap(region, 0));
+    let maxLoan = Infinity;
+    if (hasCap) { maxLoan = 0; for (let l = 100; l <= 200000; l += 100) if (l <= loanCap(region, cash + l)) maxLoan = l; }
+    const regionCap = loanCap(region, 0);
+    const capAtWant = loanCap(region, cash + wantLoan);
+    const over = wantLoan > 0 && wantLoan > maxLoan;
+    const loan = wantLoan > 0 ? (over && !force ? maxLoan : wantLoan) : (hasCap ? maxLoan : 0);
+    return { hasCap, maxLoan, regionCap, capAtWant, over, loan, top: cash + loan };
+  }, [cash, region, wantLoan, force]);
+  const canBuy = buy && buy.top > 0 ? { top: buy.top } : null;
 
   const want = useMemo(() => {
     if (!valid || price <= 0) return null;
@@ -195,29 +216,51 @@ export default function FindHome() {
 
       {tab === 'can' ? <><div className="calculator-grid" role="tabpanel">
         <div className="panel">
-          <h3><Wallet size={20}/> 내 조건 입력</h3>
-          {common}
+          <h3><Wallet size={20}/> 지역·보유 현금·대출금액</h3>
+          <AreaPicker sido={sido} lawd={lawd} onSido={onSido} onLawd={onLawd}/>
           <div className="fields stress-stage">
-            <AmountInput label="안내받은 대출금액" value={manualLoan} onChange={setManualLoan} id="fh-manual"/>
+            <AmountInput label="보유 현금" value={cash} onChange={setCash} id="fh-cash"/>
+            <AmountInput label="희망 대출금액" value={wantLoan} onChange={setWantLoan} id="fh-want"/>
           </div>
-          <p className="hint"><Info size={13} style={{ verticalAlign: 'middle' }}/> 대출금액을 비워 두면(0) DSR 40%·LTV·대출 상한 중 가장 적은 금액으로 자동 계산합니다. 은행에서 한도를 안내받았다면 그 금액을 입력하세요.</p>
+          <label className="check"><input type="checkbox" checked={firstTime} onChange={e => onFirstTime(e.target.checked)}/> 생애최초 주택 구입</label>
+          <details className="more-opts">
+            <summary>지역 구분·LTV 직접 바꾸기</summary>
+            <div className="fields">
+              <label>지역 구분 <select value={region} onChange={e => changeRegion(e.target.value as Region)}>{(Object.keys(REGIONS) as Region[]).map(r => <option key={r} value={r}>{REGIONS[r].label}</option>)}</select></label>
+              <label>LTV (참고) <small>%</small><input type="number" min="0" max="100" step="5" value={ltv} onChange={e => setLtv(Number(e.target.value))}/></label>
+            </div>
+          </details>
+          <p className="hint"><Info size={13} style={{ verticalAlign: 'middle' }}/> 희망 대출금액을 비워 두면(0) 이 지역의 대출 상한으로 계산합니다. 대출 상한과 LTV는 시군구 규제지역 여부에 따른 대표값입니다.</p>
         </div>
         <div className="panel result">
           <h3><TrendingDown size={20}/> 내 예산</h3>
-          {!canBuy ? <p role="alert">연소득과 입력 금액을 확인해 주세요.</p> : <>
-            <div className="main-result"><span>살 수 있는 아파트 최대 가격 (취득세 등 제외)</span><strong>{kr(canBuy.top)}</strong><span>{canBuy.manual ? '입력한 대출금액 + 보유 현금 기준' : `가장 먼저 한도에 걸리는 규제: ${canBuy.detail.binding}`}</span></div>
-            <div className="stats">
-              <div><span>예상 대출금액</span><strong>{kr(canBuy.manual ? manualLoan : canBuy.detail.loan)}</strong></div>
-              <div><span>보유 현금</span><strong>{kr(cash)}</strong></div>
-              <div><span>DSR 40% 기준 한도</span><strong>{kr(canBuy.detail.dsrLimit)}</strong></div>
-              <div><span>대출 금액 상한</span><strong>{kr(canBuy.detail.cap)}</strong></div>
-            </div>
+          {!lawd ? <div className="empty-result"><MapPin size={28}/><strong>지역을 선택해 주세요</strong><p>시도와 시군구를 고르고 보유 현금과 희망 대출금액을 입력하면, 이 지역에서 실제로 받을 수 있는 대출인지 확인하고 살 수 있는 아파트를 보여드립니다.</p></div>
+          : !buy ? <p role="alert">입력 금액을 확인해 주세요.</p> : <>
+            <div className="region-badge"><MapPin size={15}/> {sggName(sido, lawd)} · <b>{REGIONS[region].label.replace(/ \(.*\)/, '')}</b> · LTV {ltv}%{firstTime && ' · 생애최초'}</div>
+            <ol className="budget-steps">
+              <li><span>이 지역 최대 대출</span><strong>{buy.hasCap ? kr(buy.maxLoan) : '상한 없음'}</strong>
+                <em>{region === 'regulated' ? `규제지역 주택담보대출 상한: 집값 15억 이하 6억 · 25억 이하 4억 · 초과 2억${buy.maxLoan < buy.regionCap ? ` (현금 ${kr(cash)} 기준 집값 구간 적용)` : ''}` : region === 'capital' ? '수도권 주택담보대출 상한 6억' : '지방은 대출 금액 상한이 없어 희망 대출금액으로 계산합니다'}</em>
+                <em className="ltv-why">이 지역 LTV {ltv}%{firstTime ? ' (생애최초)' : ''}: 실제 대출은 집값의 {ltv}%를 넘을 수 없습니다.</em></li>
+            </ol>
+            {buy.over ? <div className="verdict no loan-check" role="alert">
+              <b>대출 {kr(wantLoan)}은 이 지역에서 실제로 받을 수 없습니다</b>
+              <span>이 지역 최대 대출은 {kr(buy.maxLoan)}입니다{buy.capAtWant < buy.regionCap ? ` (집값 ${kr(cash + wantLoan)} 구간 상한 ${kr(buy.capAtWant)})` : ''}. 그래도 진행하시겠습니까?</span>
+              <div className="choice">
+                <button type="button" className={!force ? 'on' : ''} onClick={() => setForce(false)}>최대 {kr(buy.maxLoan)}으로 보기</button>
+                <button type="button" className={force ? 'on' : ''} onClick={() => setForce(true)}>그래도 {kr(wantLoan)}으로 진행</button>
+              </div>
+            </div> : wantLoan > 0 ? <div className="verdict yes" role="status"><b>대출 {kr(wantLoan)} 가능</b><span>이 지역 대출 상한 안의 금액입니다.</span></div> : null}
+            {!buy.hasCap && wantLoan <= 0 ? <p className="hint">지방은 대출 상한이 없으니 희망 대출금액을 입력해 주세요.</p> :
+            <ol className="budget-steps">
+              <li className={`big${force && buy.over ? ' forced' : ''}`}><span>살 수 있는 아파트 최대 가격</span><strong>{kr(buy.top)}</strong>
+                <em>대출 {kr(buy.loan)} + 보유 현금 {kr(cash)}{force && buy.over ? ' · 실제로 받을 수 없는 대출 기준' : ''}</em></li>
+            </ol>}
+            <p className="hint">취득세·중개보수 등 부대비용은 포함하지 않았습니다. 실제 한도는 은행 심사로 정해집니다.</p>
           </>}
         </div>
       </div>
-      {canBuy && <div className="panel apt-list-panel">
-        <h3><MapPin size={20}/> 이 예산으로 살 수 있는 아파트</h3>
-        <AreaPicker sido={sido} lawd={lawd} onSido={onSido} onLawd={onLawd}/>
+      {canBuy && lawd && (buy?.loan ?? 0) > 0 && <div className="panel apt-list-panel">
+        <h3><MapPin size={20}/> {kr(canBuy.top)} 이하로 살 수 있는 {sggName(sido, lawd)} 아파트</h3>
         <AptStatus state={aptState}/>
         {aptState.status === 'done' && (() => {
           const list = aptState.apts.flatMap(a => a.types.filter(t => t.latestPrice <= canBuy.top).map(t => ({ a, t })))
