@@ -121,7 +121,7 @@ export default function FindHome() {
   const [ltv, setLtv] = useState<number>(REGIONS.regulated.ltv);
   const [stress, setStress] = useState<number>(REGIONS.regulated.stress);
   const [manualLoan, setManualLoan] = useState(0);
-  const [price, setPrice] = useState(80000);
+  const [price, setPrice] = useState(0); // 아파트를 고르거나 직접 입력하기 전에는 결과를 보여주지 않음
   const [over85, setOver85] = useState(false);
   const [sido, setSido] = useState('');
   const [lawd, setLawd] = useState('');
@@ -261,7 +261,8 @@ export default function FindHome() {
         </div>
         <div className="panel result">
           <h3><TrendingDown size={20}/> 필요 자금</h3>
-          {!want ? <p role="alert">아파트 가격과 입력 금액을 확인해 주세요.</p> : <>
+          {price <= 0 ? <div className="empty-result"><Home size={28}/><strong>아파트를 선택해 주세요</strong><p>왼쪽에서 시도·시군구·아파트·평형을 고르면 최근 실거래가로 구매 가능 여부와 필요 자금을 계산합니다. 가격을 직접 입력해도 됩니다.</p></div>
+          : !want ? <p role="alert">입력 금액을 확인해 주세요.</p> : <>
             <div className={`verdict ${want.shortage > 0 ? 'no' : 'yes'}`} role="status">
               {want.shortage > 0
                 ? <><b>구매 불가능</b><span>보유 현금과 대출을 합쳐도 {kr(want.shortage)}이 부족합니다.</span></>

@@ -2,6 +2,15 @@ import type React from 'react';
 import { BookOpen, ChevronRight, Calculator, Percent, Home, MapPin } from 'lucide-react';
 import { GUIDE_META, guidePath } from './guides/meta';
 import { GUIDE_CONTENT } from './guides/content';
+import type { GuideImage } from './guides/meta';
+import { StepsIllustration, SalaryIllustration, StressIllustration, CompareRatioIllustration, RepaymentIllustration, TermIllustration, RateIllustration, GraceIllustration, CostIllustration, PriceTagIllustration } from './Illustrations';
+
+const IMAGES: Record<GuideImage, (p: { uid?: string }) => React.ReactElement> = {
+  steps: StepsIllustration, salary: SalaryIllustration, stress: StressIllustration, ratio: CompareRatioIllustration, repay: RepaymentIllustration,
+  term: TermIllustration, rate: RateIllustration, grace: GraceIllustration, cost: CostIllustration, tag: PriceTagIllustration,
+};
+/** 글 썸네일·대표 이미지 (같은 페이지에 여러 번 나와도 id가 겹치지 않도록 uid 사용) */
+function GuideImg({ image, uid }: { image: GuideImage; uid: string }) { const C = IMAGES[image]; return <C uid={uid}/>; }
 
 type LinkProps = (path: string) => { href: string; onClick: (e: React.MouseEvent) => void };
 const TOOL_INFO: Record<string, { name: string; icon: typeof Calculator }> = {
@@ -19,6 +28,7 @@ export function GuideList({ link }: { link: LinkProps }) {
     <p>대출한도, 상환방식, 세금처럼 내 집 마련에 꼭 필요한 내용을 계산 예시와 함께 정리했습니다. 각 글의 숫자는 ZIPMOYA 계산기와 같은 공식으로 계산했습니다.</p>
     <div className="guide-cards">
       {GUIDE_META.map(g => <a key={g.slug} className="guide-card" {...link(guidePath(g.slug))}>
+        <div className="guide-thumb" aria-hidden="true"><GuideImg image={g.image} uid={`-card-${g.slug}`}/></div>
         <span className="guide-tag">{g.tag}</span>
         <strong>{g.title}</strong>
         <p>{g.description}</p>
@@ -37,6 +47,7 @@ export function GuideArticle({ slug, link }: { slug: string; link: LinkProps }) 
     <nav className="breadcrumb" aria-label="현재 위치"><a {...link('/guide/')}>가이드</a> <ChevronRight size={13}/> <span>{meta.tag}</span></nav>
     <h1>{meta.title}</h1>
     <p className="guide-meta">ZIPMOYA · <time dateTime={meta.updated ?? meta.date}>{dateLabel(meta.updated ?? meta.date)}</time> 기준</p>
+    <div className="guide-hero"><GuideImg image={meta.image} uid={`-hero-${slug}`}/></div>
     <p className="guide-summary">{meta.description}</p>
     <div className="guide-body">{Body()}</div>
     <p className="hint">이 글의 계산은 참고용 예시이며, 실제 대출 가능 금액과 세금은 금융기관 심사와 개인 상황에 따라 달라질 수 있습니다.</p>
