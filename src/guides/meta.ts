@@ -16,3 +16,12 @@ export const GUIDE_META: GuideMeta[] = [
 ];
 
 export const guidePath = (slug: string) => `/guide/${slug}/`;
+
+/** 가이드 목록 한 페이지당 글 수 */
+export const GUIDES_PER_PAGE = 10;
+/** 최신 글이 먼저: 날짜(수정일 우선) 내림차순, 같은 날짜면 목록에 적힌 순서대로 */
+export const GUIDES_SORTED = GUIDE_META.map((g, i) => ({ g, i }))
+  .sort((a, b) => (b.g.updated ?? b.g.date).localeCompare(a.g.updated ?? a.g.date) || a.i - b.i)
+  .map(x => x.g);
+export const guidePageCount = () => Math.max(1, Math.ceil(GUIDE_META.length / GUIDES_PER_PAGE));
+export const guideListPath = (page: number) => page <= 1 ? '/guide/' : `/guide/page/${page}/`;

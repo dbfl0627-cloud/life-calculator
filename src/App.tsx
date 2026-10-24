@@ -41,7 +41,8 @@ export function App({initialPath}:{initialPath:string}){
  page==='/dsr/'?<DSR/>:
  page==='/ltv/'?<LTV/>:
  page==='/find-home/'?<FindHome/>:
- page==='/guide/'?<GuideList link={link}/>:
+ page==='/guide/'?<GuideList page={1} link={link}/>:
+ page.startsWith('/guide/page/')?<GuideList page={Number(page.split('/')[3])||1} link={link}/>:
  page.startsWith('/guide/')?<GuideArticle slug={page.split('/')[2]} link={link}/>:
  <><section className="hero with-illust"><div><span className="eyebrow"><ShieldCheck size={15}/> ZIPMOYA LOAN CALCULATOR</span><h1>주택담보대출 계산기<br/><em>주담대 월 상환액, 한눈에.</em></h1><p>대출금액, 금리, 상환기간을 입력하면 주택담보대출 월 납입액부터 총 이자까지 바로 확인할 수 있어요.</p><button className="primary" onClick={()=>document.getElementById('calculator')?.scrollIntoView({behavior:'smooth'})}>지금 계산하기 <ChevronRight size={18}/></button></div><MortgageIllustration/></section>
  <section className="section" id="calculator"><div className="section-heading"><div><span className="eyebrow">MORTGAGE CALCULATOR</span><h2>주택담보대출(주담대) 계산기</h2><p>거치기간과 원리금균등·원금균등 상환방식까지 반영한 주담대 예상 납입액을 계산합니다.</p></div></div>

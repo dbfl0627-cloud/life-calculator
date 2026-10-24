@@ -1,6 +1,6 @@
 import type React from 'react';
 import { BookOpen, ChevronRight, Calculator, Percent, Home, MapPin } from 'lucide-react';
-import { GUIDE_META, guidePath } from './guides/meta';
+import { GUIDE_META, GUIDES_SORTED, GUIDES_PER_PAGE, guidePath, guidePageCount, guideListPath } from './guides/meta';
 import { GUIDE_CONTENT } from './guides/content';
 import type { GuideImage } from './guides/meta';
 import { StepsIllustration, SalaryIllustration, StressIllustration, CompareRatioIllustration, RepaymentIllustration, TermIllustration, RateIllustration, GraceIllustration, CostIllustration, PriceTagIllustration } from './Illustrations';
@@ -21,13 +21,27 @@ const TOOL_INFO: Record<string, { name: string; icon: typeof Calculator }> = {
 };
 const dateLabel = (d: string) => { const [y, m, day] = d.split('-'); return `${y}년 ${Number(m)}월 ${Number(day)}일`; };
 
-export function GuideList({ link }: { link: LinkProps }) {
+function Pager({ page, total, link }: { page: number; total: number; link: LinkProps }) {
+  if (total <= 1) return null;
+  return <nav className="pager" aria-label="가이드 목록 페이지">
+    {page > 1 ? <a {...link(guideListPath(page - 1))} rel="prev">‹ 이전</a> : <span className="off">‹ 이전</span>}
+    {Array.from({ length: total }, (_, i) => i + 1).map(n => n === page
+      ? <span key={n} className="cur" aria-current="page">{n}</span>
+      : <a key={n} {...link(guideListPath(n))}>{n}</a>)}
+    {page < total ? <a {...link(guideListPath(page + 1))} rel="next">다음 ›</a> : <span className="off">다음 ›</span>}
+  </nav>;
+}
+
+export function GuideList({ page = 1, link }: { page?: number; link: LinkProps }) {
+  const total = guidePageCount();
+  const cur = Math.min(Math.max(1, page), total);
+  const items = GUIDES_SORTED.slice((cur - 1) * GUIDES_PER_PAGE, cur * GUIDES_PER_PAGE);
   return <section className="article guide-list">
     <span className="eyebrow"><BookOpen size={15}/> ZIPMOYA GUIDE</span>
     <h1>집 사기 전에 알아야 할 대출·자금 가이드</h1>
     <p>대출한도, 상환방식, 세금처럼 내 집 마련에 꼭 필요한 내용을 계산 예시와 함께 정리했습니다. 각 글의 숫자는 ZIPMOYA 계산기와 같은 공식으로 계산했습니다.</p>
     <div className="guide-cards">
-      {GUIDE_META.map(g => <a key={g.slug} className="guide-card" {...link(guidePath(g.slug))}>
+      {items.map(g => <a key={g.slug} className="guide-card" {...link(guidePath(g.slug))}>
         <div className="guide-thumb" aria-hidden="true"><GuideImg image={g.image} uid={`-card-${g.slug}`}/></div>
         <span className="guide-tag">{g.tag}</span>
         <strong>{g.title}</strong>
@@ -35,6 +49,7 @@ export function GuideList({ link }: { link: LinkProps }) {
         <span className="about-more">읽어보기 <ChevronRight size={15}/></span>
       </a>)}
     </div>
+    <Pager page={cur} total={total} link={link}/>
   </section>;
 }
 
@@ -42,7 +57,7 @@ export function GuideArticle({ slug, link }: { slug: string; link: LinkProps }) 
   const meta = GUIDE_META.find(g => g.slug === slug);
   const Body = GUIDE_CONTENT[slug];
   if (!meta || !Body) return null;
-  const others = GUIDE_META.filter(g => g.slug !== slug).slice(0, 4);
+  const others = GUIDES_SORTED.filter(g => g.slug !== slug).slice(0, 4);
   return <article className="article guide">
     <nav className="breadcrumb" aria-label="현재 위치"><a {...link('/guide/')}>가이드</a> <ChevronRight size={13}/> <span>{meta.tag}</span></nav>
     <h1>{meta.title}</h1>

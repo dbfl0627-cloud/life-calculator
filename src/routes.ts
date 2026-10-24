@@ -1,11 +1,13 @@
 /** 실제 서비스 주소. 개인 도메인을 연결하면 이 값만 바꾸면 canonical·sitemap·OG URL이 함께 바뀝니다. */
 export const SITE_URL = 'https://zipmoya.com';
-import { GUIDE_META, guidePath } from './guides/meta';
+import { GUIDE_META, guidePath, guidePageCount, guideListPath } from './guides/meta';
 export type RouteMeta = { title:string; description:string; canonical:string; inSitemap:boolean; ogImage?:string };
 const CALC_TITLE = '주담대 계산기 · 주택담보대출 계산기 | ZIPMOYA';
 const CALC_DESC = '주담대 계산기로 주택담보대출 월 상환액과 총 이자를 바로 계산하세요. 원리금균등·원금균등 상환방식, 거치기간, 월별 상환표까지 무료로 확인할 수 있습니다.';
 export const ROUTES: Record<string, RouteMeta> = {
   '/guide/': { title:'내 집 마련 대출·자금 가이드 | ZIPMOYA', description:'주택담보대출 한도, DSR·LTV, 스트레스 DSR, 상환방식, 취득세와 부대비용까지 내 집 마련에 필요한 내용을 계산 예시와 함께 정리한 ZIPMOYA 가이드입니다.', canonical:'/guide/', inSitemap:true },
+  // 가이드 목록 2페이지부터: /guide/page/2/ …
+  ...Object.fromEntries(Array.from({ length: guidePageCount() - 1 }, (_, i) => i + 2).map(n => [guideListPath(n), { title:`내 집 마련 대출·자금 가이드 ${n}페이지 | ZIPMOYA`, description:`ZIPMOYA 가이드 목록 ${n}페이지입니다. 주택담보대출 한도, DSR·LTV, 상환방식, 세금 등 내 집 마련 정보를 확인하세요.`, canonical:guideListPath(n), inSitemap:true }])),
   ...Object.fromEntries(GUIDE_META.map(g => [guidePath(g.slug), { title:`${g.title} | ZIPMOYA`, description:g.description, canonical:guidePath(g.slug), inSitemap:true }])),
   '/': { title:CALC_TITLE, description:CALC_DESC, canonical:'/', inSitemap:true },
   // 홈과 같은 계산기 화면이므로 검색 결과가 나뉘지 않도록 홈을 대표 주소로 지정
