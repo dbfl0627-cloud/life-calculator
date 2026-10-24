@@ -137,16 +137,16 @@ export default function FindHome() {
   const [area, setArea] = useState('');
   const [aptQuery, setAptQuery] = useState('');
   const aptState = useApts(lawd);
-  const onSido = (s: string) => { setSido(s); setLawd(''); setAptKey(''); setArea(''); if (s) changeRegion(regionOfSido(s)); };
+  const onSido = (s: string) => { setSido(s); setLawd(''); setAptKey(''); setArea(''); setPrice(0); if (s) changeRegion(regionOfSido(s)); };
   const onFirstTime = (v: boolean) => { setFirstTime(v); setLtv(ltvFor(region, v)); };
-  const onLawd = (c: string) => { setLawd(c); setAptKey(''); setArea(''); setAptQuery(''); if (c) changeRegion(regionOf(sido, c)); };
+  const onLawd = (c: string) => { setLawd(c); setAptKey(''); setArea(''); setAptQuery(''); setPrice(0); if (c) changeRegion(regionOf(sido, c)); };
   const aptId = (a: Apt) => `${a.dong}|${a.jibun}|${a.name}`;
   const selectedApt = aptState.apts.find(a => aptId(a) === aptKey);
   const selectedType = selectedApt?.types.find(t => String(t.area) === area);
   const pickType = (a: Apt | undefined, ar: string) => {
     setArea(ar);
     const t = a?.types.find(x => String(x.area) === ar);
-    if (t) { setPrice(t.latestPrice); setOver85(t.area > 85); }
+    if (t) { setPrice(t.latestPrice); setOver85(t.area > 85); } else setPrice(0);
   };
   // 검색어로 거르되, 이미 고른 아파트는 목록에 남겨 둠
   const filteredApts = aptState.apts.filter(a => !aptQuery || aptId(a) === aptKey || a.name.includes(aptQuery.trim()) || a.dong.includes(aptQuery.trim()));
@@ -187,9 +187,9 @@ export default function FindHome() {
 
   const common = <>
     <div className="fields">
+      <AmountInput label="보유 현금" value={cash} onChange={setCash} id="fh-cash2"/>
       <AmountInput label="연소득" value={income} onChange={setIncome} id="fh-income"/>
-      <AmountInput label="기존 대출 연간 원리금" value={existingAnnual} onChange={setExistingAnnual} id="fh-existing" unit="만원/년"/>
-      <AmountInput label="보유 현금" value={cash} onChange={setCash} id="fh-cash"/>
+      <AmountInput label="기존 대출 연간 원리금" value={existingAnnual} onChange={setExistingAnnual} id="fh-existing2" unit="만원/년"/>
       <label>대출 금리 <small>연 %</small><input type="number" min="0" step="0.1" value={rate} onChange={e => setRate(Number(e.target.value))}/></label>
       <label>지역 <select value={region} onChange={e => changeRegion(e.target.value as Region)}>{(Object.keys(REGIONS) as Region[]).map(r => <option key={r} value={r}>{REGIONS[r].label}</option>)}</select></label>
       <label>대출기간 <small>년</small><select value={years} onChange={e => setYears(Number(e.target.value))}>{[20, 30, 35, 40, 50].map(y => <option key={y} value={y}>{y}년</option>)}</select></label>
@@ -293,18 +293,17 @@ export default function FindHome() {
               <option value="">선택</option>{selectedApt.types.map(t => <option key={t.area} value={String(t.area)}>{t.area}㎡ ({pyeong(t.area)}평) · {t.count}건</option>)}</select></label>}
           </div>}
           {selectedApt && <KakaoMap height={240} items={[toMapItem(sido, lawd, selectedApt, selectedApt.name, `${selectedApt.dong} ${selectedApt.jibun} · ${selectedApt.buildYear}년 준공`)]}/>}
-          {selectedApt && selectedType && <p className="apt-picked">{selectedApt.name} {selectedType.area}㎡ · 최근 거래 {selectedType.latestDate} <b>{kr(selectedType.latestPrice)}</b>{selectedType.count > 1 && <> · 6개월 {kr(selectedType.minPrice)}~{kr(selectedType.maxPrice)}</>}</p>}
-          <p className="hint">아파트와 평형을 고르면 최근 실거래가가 아래 가격에 자동으로 입력됩니다. 가격은 직접 수정할 수 있습니다.</p>
-          <div className="fields">
-            <AmountInput label="아파트 가격 (실거래가)" value={price} onChange={setPrice} id="fh-price"/>
-            <label>전용면적 <select value={over85 ? 'over' : 'under'} onChange={e => setOver85(e.target.value === 'over')}><option value="under">85㎡ 이하</option><option value="over">85㎡ 초과</option></select></label>
+          <div className={`price-out${price > 0 ? '' : ' empty'}`} aria-live="polite">
+            <span>아파트 가격 (최근 실거래가)</span>
+            <strong>{price > 0 ? kr(price) : '아파트와 평형을 선택하세요'}</strong>
+            {selectedApt && selectedType && <em>{selectedApt.name} {selectedType.area}㎡({pyeong(selectedType.area)}평) · {selectedType.latestDate} 거래{selectedType.count > 1 ? ` · 최근 6개월 ${kr(selectedType.minPrice)}~${kr(selectedType.maxPrice)} (${selectedType.count}건)` : ''} · 전용 85㎡ {over85 ? '초과' : '이하'}</em>}
           </div>
           <h3 className="sub-h3"><Wallet size={20}/> 내 조건 입력</h3>
           {common}
         </div>
         <div className="panel result">
           <h3><TrendingDown size={20}/> 필요 자금</h3>
-          {price <= 0 ? <div className="empty-result"><Home size={28}/><strong>아파트를 선택해 주세요</strong><p>왼쪽에서 시도·시군구·아파트·평형을 고르면 최근 실거래가로 구매 가능 여부와 필요 자금을 계산합니다. 가격을 직접 입력해도 됩니다.</p></div>
+          {price <= 0 ? <div className="empty-result"><Home size={28}/><strong>아파트를 선택해 주세요</strong><p>왼쪽에서 시도·시군구·아파트·평형을 고르면 최근 실거래가로 구매 가능 여부와 필요 자금을 계산합니다.</p></div>
           : !want ? <p role="alert">입력 금액을 확인해 주세요.</p> : <>
             <div className={`verdict ${want.shortage > 0 ? 'no' : 'yes'}`} role="status">
               {want.shortage > 0
