@@ -107,3 +107,7 @@
 .guide-others{padding-left:20px}
 .guide-others li{font-size:14px;line-height:2}
 @media(max-width:720px){.guide-cards{grid-template-columns:1fr}}
+
+.hint.loading{display:flex;align-items:center;gap:8px}
+.spinner{width:14px;height:14px;border:2px solid #d4e5f4;border-top-color:#216baa;border-radius:50%;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}

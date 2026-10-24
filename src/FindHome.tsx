@@ -94,7 +94,7 @@ function AreaPicker({ sido, lawd, onSido, onLawd }: { sido: string; lawd: string
 }
 
 function AptStatus({ state }: { state: AptState }) {
-  if (state.status === 'loading') return <p className="hint">최근 6개월 실거래가를 불러오는 중입니다…</p>;
+  if (state.status === 'loading') return <p className="hint loading" role="status"><span className="spinner" aria-hidden="true"/>아파트 검색 중…</p>;
   if (state.status === 'error') return <p role="alert" className="hint">실거래가를 불러오지 못했습니다: {state.error}</p>;
   if (state.status === 'done' && !state.apts.length) return <p className="hint">최근 6개월 동안 이 지역의 아파트 거래가 없습니다.</p>;
   return null;
