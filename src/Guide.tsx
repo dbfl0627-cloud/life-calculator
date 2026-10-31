@@ -40,6 +40,7 @@ export function GuideList({ page = 1, link }: { page?: number; link: LinkProps }
     <span className="eyebrow"><BookOpen size={15}/> ZIPMOYA GUIDE</span>
     <h1>집 사기 전에 알아야 할 대출·자금 가이드</h1>
     <p>대출한도, 상환방식, 세금처럼 내 집 마련에 꼭 필요한 내용을 계산 예시와 함께 정리했습니다. 각 글의 숫자는 ZIPMOYA 계산기와 같은 공식으로 계산했습니다.</p>
+    <a className="reg-banner" {...link('/regulations/')}><strong>주택담보대출 규제 총정리</strong><span>지역별 LTV · 대출 한도 · 스트레스 DSR · 규제지역 목록을 한 페이지에서 확인하세요</span><ChevronRight size={18}/></a>
     <div className="guide-cards">
       {items.map(g => <a key={g.slug} className="guide-card" {...link(guidePath(g.slug))}>
         <div className="guide-thumb" aria-hidden="true"><GuideImg image={g.image} uid={`-card-${g.slug}`}/></div>

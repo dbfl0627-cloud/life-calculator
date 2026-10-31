@@ -5,4 +5,5 @@ export {ROUTES, SITE_URL} from './routes';
 export {FAQ, DSR_FAQ, LTV_FAQ} from './faq';
 export {INFO_UPDATED} from './Examples';
 export {GUIDE_META} from './guides/meta';
+export {BLOG_POSTS} from './blog/posts';
 export function render(path:string){ return renderToString(<React.StrictMode><App initialPath={path}/></React.StrictMode>); }

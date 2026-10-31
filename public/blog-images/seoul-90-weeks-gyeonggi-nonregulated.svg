@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">같은 8억원 아파트를 규제지역 LTV 40%와 비규제지역 LTV 70%로 비교한 일러스트</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<path d="M118 28 c-15 0 -26 11 -26 25 c0 19 26 41 26 41 s26 -22 26 -41 c0 -14 -11 -25 -26 -25 Z" fill="#e05a4f"/><circle cx="118" cy="53" r="9" fill="#fff"/>
+<path d="M302 28 c-15 0 -26 11 -26 25 c0 19 26 41 26 41 s26 -22 26 -41 c0 -14 -11 -25 -26 -25 Z" fill="#216baa"/><circle cx="302" cy="53" r="9" fill="#fff"/>
+<rect x="40" y="104" width="156" height="140" rx="14" fill="#fff" stroke="#c9d9ea" stroke-width="2"/>
+<text x="118" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">규제지역</text>
+<rect x="62" y="144" width="112" height="22" rx="11" fill="#eef3f8"/><rect x="62" y="144" width="45" height="22" rx="11" fill="#e05a4f"/>
+<text x="118" y="192" text-anchor="middle" font-size="22" font-weight="900" fill="#e05a4f" font-family="system-ui, -apple-system, sans-serif">LTV 40%</text>
+<text x="118" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">필요 현금 4.8억</text>
+<rect x="224" y="104" width="156" height="140" rx="14" fill="#fff" stroke="#c9d9ea" stroke-width="2"/>
+<text x="302" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">수도권 비규제</text>
+<rect x="246" y="144" width="112" height="22" rx="11" fill="#eef3f8"/><rect x="246" y="144" width="78" height="22" rx="11" fill="#216baa"/>
+<text x="302" y="192" text-anchor="middle" font-size="22" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">LTV 70%</text>
+<text x="302" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">필요 현금 2.4억</text>
+<rect x="183" y="60" width="54" height="26" rx="13" fill="#0b2545"/><text x="210" y="78" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="system-ui, -apple-system, sans-serif">8억</text>
+</svg>

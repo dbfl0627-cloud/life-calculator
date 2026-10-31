@@ -9,6 +9,8 @@ import DSR from './DSR';
 import LTV from './LTV';
 import FindHome from './FindHome';
 import {GuideList, GuideArticle} from './Guide';
+import {BlogList, BlogPostView} from './Blog';
+import {Regulations} from './RegulationsPage';
 import {About} from './About';
 import {MortgageIllustration} from './Illustrations';
 import {RelatedTools, NotFound} from './RelatedTools';
@@ -33,7 +35,7 @@ export function App({initialPath}:{initialPath:string}){
  const rows=useMemo(()=>{try{return calculateLoan(amount*10000,rate,years,grace,method)}catch{return []}},[amount,rate,years,grace,method]);
  const totalInterest=rows.reduce((s,r)=>s+r.interest,0),total=rows.reduce((s,r)=>s+r.payment,0);
  const firstRepayment=rows.find(r=>!r.grace)?.payment??0;
- return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/find-home/')}>내 집 찾기</a><a {...navLink('/')}>주담대 계산기</a><a {...navLink('/dsr/')}>DSR 계산기</a><a {...navLink('/ltv/')}>LTV 계산기</a><a {...navLink('/guide/')} className={current.startsWith('/guide/')?'active':undefined}>가이드</a></nav></div></header>
+ return <><header><div className="wrap head"><a className="brand" {...link('/')}><span className="brand-icon"><Calculator size={21}/></span> ZIPMOYA</a><nav><a {...navLink('/find-home/')}>내 집 찾기</a><a {...navLink('/')}>주담대<span className="nav-long"> 계산기</span></a><a {...navLink('/dsr/')}>DSR<span className="nav-long"> 계산기</span></a><a {...navLink('/ltv/')}>LTV<span className="nav-long"> 계산기</span></a><a {...navLink('/guide/')} className={current.startsWith('/guide/')?'active':undefined}>가이드</a><a {...navLink('/blog/')} className={current.startsWith('/blog/')?'active':undefined}>블로그</a></nav></div></header>
  <main className="wrap" onClick={onMainClick} onInputCapture={stripLeadingZeros}>
  {!isKnown?<NotFound link={link}/>:
  page==='/about/'?<About link={link}/>:
@@ -41,6 +43,10 @@ export function App({initialPath}:{initialPath:string}){
  page==='/dsr/'?<DSR/>:
  page==='/ltv/'?<LTV/>:
  page==='/find-home/'?<FindHome/>:
+ page==='/regulations/'?<Regulations link={link}/>:
+ page==='/blog/'?<BlogList page={1} link={link}/>:
+ page.startsWith('/blog/page/')?<BlogList page={Number(page.split('/')[3])||1} link={link}/>:
+ page.startsWith('/blog/')?<BlogPostView slug={page.split('/')[2]} link={link}/>:
  page==='/guide/'?<GuideList page={1} link={link}/>:
  page.startsWith('/guide/page/')?<GuideList page={Number(page.split('/')[3])||1} link={link}/>:
  page.startsWith('/guide/')?<GuideArticle slug={page.split('/')[2]} link={link}/>:
@@ -51,5 +57,5 @@ export function App({initialPath}:{initialPath:string}){
  {rows.length>0&&<div className="panel schedule"><div className="schedule-head"><div><h3><CalendarDays size={20}/> 월별 상환 일정</h3><p>원 단위 반올림 표시로 합계에 소폭 차이가 생길 수 있습니다.</p></div><button className="secondary" onClick={()=>setExpanded(!expanded)}>{expanded?'간단히 보기':'전체 상환표 보기'}</button></div><div className="table-scroll"><table><thead><tr><th>회차</th><th>월 납입액</th><th>원금</th><th>이자</th><th>남은 원금</th></tr></thead><tbody>{(expanded?rows:rows.slice(0,12)).map(r=><tr key={r.month}><td>{r.month}개월{r.grace?' (거치)':''}</td><td>{money(r.payment)}</td><td>{money(r.principal)}</td><td>{money(r.interest)}</td><td>{money(r.balance)}</td></tr>)}</tbody></table></div></div>}</section>
  <section className="content"><h2>주택담보대출 계산 방법</h2><p className="lead">주담대 계산기는 대출원금, 연 이자율, 대출기간을 바탕으로 매달 갚아야 할 원금과 이자를 계산합니다. 같은 금액을 빌려도 상환방식과 거치기간에 따라 월 상환액과 총 이자가 크게 달라지므로, 대출 상담 전에 여러 조건을 비교해 보세요.</p><div className="info-grid"><article><h3>원리금균등상환</h3><p>매월 원금과 이자를 합친 금액을 일정하게 납부하는 방식입니다. 초기에는 이자 비중이 높고 시간이 지날수록 원금 비중이 커집니다.</p></article><article><h3>원금균등상환</h3><p>매월 같은 금액의 원금을 갚고, 남은 원금에 대한 이자를 납부합니다. 초기 납입액은 크지만 시간이 갈수록 감소합니다.</p></article><article><h3>거치기간이란?</h3><p>일정 기간 원금 상환을 미루고 이자만 내는 조건입니다. 이 계산기는 전체 대출기간에 거치기간이 포함된다고 가정합니다.</p></article></div><MortgageExamples/><h2>자주 묻는 질문</h2>{FAQ.map(([q,a])=><details key={q}><summary>{q}</summary><p>{a}</p></details>)}<UpdatedNote/></section></>}
  {['/','/dsr/','/ltv/'].includes(current)&&isKnown&&<RelatedTools current={current} link={link}/>}
- </main><footer><div className="wrap footer"><div><strong>ZIPMOYA</strong><p>집에 관한 계산과 정보, 집모야.</p><small>본 서비스는 참고용 계산 도구이며 금융 자문을 제공하지 않습니다.</small></div><div><a {...link('/about/')}>사이트 소개</a><a {...link('/privacy/')}>개인정보처리방침</a></div></div></footer></>;
+ </main><footer><div className="wrap footer"><div><strong>ZIPMOYA</strong><p>집에 관한 계산과 정보, 집모야.</p><small>본 서비스는 참고용 계산 도구이며 금융 자문을 제공하지 않습니다.</small></div><div><a {...link('/regulations/')}>대출 규제 총정리</a><a {...link('/about/')}>사이트 소개</a><a {...link('/privacy/')}>개인정보처리방침</a></div></div></footer></>;
 }

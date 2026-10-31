@@ -3,7 +3,7 @@
 import {mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
-const {render,ROUTES,SITE_URL,FAQ,DSR_FAQ,LTV_FAQ,INFO_UPDATED,GUIDE_META}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
+const {render,ROUTES,SITE_URL,FAQ,DSR_FAQ,LTV_FAQ,INFO_UPDATED,GUIDE_META,BLOG_POSTS}=await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
 const template=await readFile('dist/index.html','utf8');
 const esc=s=>s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const jsonLd=obj=>`<script type="application/ld+json">${JSON.stringify(obj).replace(/</g,'\\u003c')}</script>`;
@@ -23,6 +23,14 @@ const guideLd=route=>{
   return jsonLd({'@context':'https://schema.org','@type':'Article',headline:g.title,description:g.description,datePublished:g.date,dateModified:g.updated??g.date,inLanguage:'ko',mainEntityOfPage:url,image:`${SITE_URL}/og/default.png`,author:{'@type':'Organization',name:'ZIPMOYA',url:SITE_URL+'/'},publisher:{'@type':'Organization',name:'ZIPMOYA',logo:{'@type':'ImageObject',url:`${SITE_URL}/apple-touch-icon.png`}}})
     +jsonLd({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'가이드',item:`${SITE_URL}/guide/`},{'@type':'ListItem',position:2,name:g.title,item:url}]});
 };
+// 블로그 글: BlogPosting + Breadcrumb 구조화 데이터
+const blogLd=route=>{
+  const p=BLOG_POSTS.find(x=>route===`/blog/${x.slug}/`);
+  if(!p) return '';
+  const url=`${SITE_URL}${route}`;
+  return jsonLd({'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.summary||p.title,datePublished:p.date,dateModified:p.date,inLanguage:'ko',mainEntityOfPage:url,image:`${SITE_URL}/og/default.png`,author:{'@type':'Organization',name:'ZIPMOYA',url:SITE_URL+'/'},publisher:{'@type':'Organization',name:'ZIPMOYA',logo:{'@type':'ImageObject',url:`${SITE_URL}/apple-touch-icon.png`}},citation:p.sources.map(s=>s.url)})
+    +jsonLd({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'블로그',item:`${SITE_URL}/blog/`},{'@type':'ListItem',position:2,name:p.title,item:url}]});
+};
 for(const [route,meta] of Object.entries(ROUTES)){
   const url=SITE_URL+meta.canonical;
   const extraHead=`<link rel="canonical" href="${url}"/><meta property="og:url" content="${url}"/><meta property="og:site_name" content="ZIPMOYA"/><meta property="og:locale" content="ko_KR"/>`
@@ -31,7 +39,7 @@ for(const [route,meta] of Object.entries(ROUTES)){
     +(meta.canonical==='/'?calcLd.map(jsonLd).join(''):'')
     +(route==='/dsr/'?jsonLd(dsrLd)+jsonLd(faqLd(DSR_FAQ)):'')
     +(route==='/ltv/'?jsonLd(ltvLd)+jsonLd(faqLd(LTV_FAQ)):'')
-    +guideLd(route);
+    +guideLd(route)+blogLd(route);
   let html=template.replace(/<link rel="canonical"[^>]*>/,"")
     .replace(/<title>.*?<\/title>/,`<title>${esc(meta.title)}</title>${extraHead}`)
     .replace(/(<meta name="description" content=")[^"]*/,`$1${esc(meta.description)}`)
@@ -62,6 +70,10 @@ await writeFile('dist/llms.txt',`# ZIPMOYA (집모야)
 ## 가이드
 - [내 집 마련 대출·자금 가이드 목록](${SITE_URL}/guide/)
 ${GUIDE_META.map(g=>`- [${g.title}](${SITE_URL}/guide/${g.slug}/): ${g.description}`).join('\n')}
+
+## 블로그 (매주 토요일 부동산·대출 뉴스 정리)
+- [블로그 목록](${SITE_URL}/blog/)
+${BLOG_POSTS.slice(0,30).map(p=>`- [${p.title}](${SITE_URL}/blog/${p.slug}/) (${p.date}): ${p.summary}`).join('\n')}
 
 ## 안내
 - [사이트 소개](${SITE_URL}/about/)

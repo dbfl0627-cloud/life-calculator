@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import SGG from './data/sgg.json';
+import { REGION_RULES, regionLoanCap, REGULATED_GYEONGGI, type RegionKey } from './regulations';
 import { MapPin, Wallet, TrendingDown, Info, Search, Home } from 'lucide-react';
 import { monthlyPayment, loanFromMonthlyPayment } from './DSR';
 import { koreanAmount } from './format';
@@ -12,20 +13,11 @@ import { KakaoMap, type MapItem } from './KakaoMap';
  * 금액 단위: 만원.
  */
 
-/** 지역 구분별 대표 규제값. 정책이 자주 바뀌므로 화면에서 수정할 수 있습니다. */
-export const REGIONS = {
-  regulated: { label: '규제지역 (서울 등)', ltv: 40, stress: 3.0 },
-  capital: { label: '수도권 비규제지역', ltv: 70, stress: 3.0 },
-  local: { label: '지방', ltv: 70, stress: 1.5 },
-} as const;
-type Region = keyof typeof REGIONS;
-
-/** 수도권·규제지역 주택담보대출 금액 상한(만원). 규제지역은 주택가격 구간별, 수도권 비규제는 6억 일괄. 지방은 상한 없음. */
-export function loanCap(region: Region, price: number): number {
-  if (region === 'regulated') return price <= 150000 ? 60000 : price <= 250000 ? 40000 : 20000;
-  if (region === 'capital') return 60000;
-  return Infinity;
-}
+/** 지역 구분별 규제값은 src/regulations.ts 한 곳에서 관리합니다(화면에서 수정 가능). */
+export const REGIONS = REGION_RULES;
+type Region = RegionKey;
+/** 지역·주택가격별 주택담보대출 금액 상한(만원). 지방은 상한 없음(Infinity). */
+export const loanCap = regionLoanCap;
 
 /** 1주택 유상취득 기준 취득세 + 지방교육세 (+ 85㎡ 초과 시 농어촌특별세) 합계 세율(%) */
 export function acquisitionTaxRate(price: number, over85: boolean): number {
@@ -62,10 +54,10 @@ const sggOf = (sido: string) => SGG_MAP[sido] ?? [];
 /** 시도 → 지역 구분 기본값 (서울은 전역 규제지역, 경기·인천은 수도권 비규제로 두고 필요하면 직접 변경) */
 const regionOfSido = (sido: string): Region => sido === '서울특별시' ? 'regulated' : (sido === '경기도' || sido === '인천광역시') ? 'capital' : 'local';
 /** 2025.10.15 대책 기준 경기도 규제지역(시군구 코드). 서울은 전역 규제지역. 지정이 바뀌면 여기만 수정하세요. */
-const REGULATED_GG = new Set(['41290', '41210', '41131', '41133', '41135', '41111', '41115', '41117', '41173', '41465', '41430', '41450']);
+const REGULATED_GG = new Set(Object.keys(REGULATED_GYEONGGI));
 const regionOf = (sido: string, lawd: string): Region => sido === '서울특별시' || REGULATED_GG.has(lawd) ? 'regulated' : regionOfSido(sido);
 /** 지역·생애최초 여부별 LTV 대표값(%) */
-const ltvFor = (r: Region, firstTime: boolean) => firstTime ? (r === 'local' ? 80 : 70) : REGIONS[r].ltv;
+const ltvFor = (r: Region, firstTime: boolean) => firstTime ? REGIONS[r].ltvFirstTime : REGIONS[r].ltv;
 const pyeong = (m2: number) => Math.round(m2 / 3.3058);
 const sggName = (sido: string, lawd: string) => sggOf(sido).find(([c]) => c === lawd)?.[1] ?? '';
 /** 실거래가 단지 → 지도 표시용 항목 (지번 주소로 좌표 변환, 실패 시 '동 + 단지명' 키워드 검색) */
@@ -121,7 +113,7 @@ export default function FindHome() {
   const [existingAnnual, setExistingAnnual] = useState(0);
   const [cash, setCash] = useState(20000);
   const [rate, setRate] = useState(4.0);
-  const [years, setYears] = useState(40);
+  const [years, setYears] = useState(30); // 수도권·규제지역 주담대 최장 30년
   const [region, setRegion] = useState<Region>('regulated');
   const [ltv, setLtv] = useState<number>(REGIONS.regulated.ltv);
   const [stress, setStress] = useState<number>(REGIONS.regulated.stress);
@@ -151,7 +143,7 @@ export default function FindHome() {
   // 검색어로 거르되, 이미 고른 아파트는 목록에 남겨 둠
   const filteredApts = aptState.apts.filter(a => !aptQuery || aptId(a) === aptKey || a.name.includes(aptQuery.trim()) || a.dong.includes(aptQuery.trim()));
 
-  function changeRegion(r: Region) { setRegion(r); setLtv(ltvFor(r, firstTime)); setStress(REGIONS[r].stress); }
+  function changeRegion(r: Region) { setRegion(r); setLtv(ltvFor(r, firstTime)); setStress(REGIONS[r].stress); const my = REGIONS[r].maxYears; if (my) setYears(y => Math.min(y, my)); }
   const inputs: Inputs = { income, existingAnnual, cash, rate, years, region, ltv, stress, dsrLimit: 40 };
   const valid = [income, existingAnnual, cash, rate, ltv, stress, price].every(n => Number.isFinite(n) && n >= 0) && income > 0;
 
@@ -239,7 +231,8 @@ export default function FindHome() {
             <div className="region-badge"><MapPin size={15}/> {sggName(sido, lawd)} · <b>{REGIONS[region].label.replace(/ \(.*\)/, '')}</b> · LTV {ltv}%{firstTime && ' · 생애최초'}</div>
             <ol className="budget-steps">
               <li><span>이 지역 최대 대출</span><strong>{buy.hasCap ? kr(buy.maxLoan) : '상한 없음'}</strong>
-                <em>{region === 'regulated' ? `규제지역 주택담보대출 상한: 집값 15억 이하 6억 · 25억 이하 4억 · 초과 2억${buy.maxLoan < buy.regionCap ? ` (현금 ${kr(cash)} 기준 집값 구간 적용)` : ''}` : region === 'capital' ? '수도권 주택담보대출 상한 6억' : '지방은 대출 금액 상한이 없어 희망 대출금액으로 계산합니다'}</em>
+                <em>{region === 'regulated' ? `규제지역 주택담보대출 상한: 집값 15억 이하 6억 · 25억 이하 4억 · 초과 2억${buy.maxLoan < buy.regionCap ? ` (현금 ${kr(cash)} 기준 집값 구간 적용)` : ''}` : region === 'capital' ? `수도권 주택담보대출 상한: 집값 15억 이하 6억 · 25억 이하 4억 · 초과 2억${buy.maxLoan < buy.regionCap ? ` (현금 ${kr(cash)} 기준 집값 구간 적용)` : ''}` : '지방은 대출 금액 상한이 없어 희망 대출금액으로 계산합니다'}</em>
+                <em className="ltv-why"><a href="/regulations/">지역별 대출 규제 기준 자세히 보기 ›</a></em>
                 <em className="ltv-why">이 지역 LTV {ltv}%{firstTime ? ' (생애최초)' : ''}: 실제 대출은 집값의 {ltv}%를 넘을 수 없습니다.</em></li>
             </ol>
             {buy.over ? <div className="verdict no loan-check" role="alert">

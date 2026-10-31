@@ -1,4 +1,5 @@
 import { koreanAmount } from './format';
+import { REGION_RULES } from './regulations';
 
 /**
  * AI 검색·검색엔진이 바로 인용할 수 있는 예시 표.
@@ -44,13 +45,13 @@ export function DsrExamples() {
   const incomes = [3000, 4000, 5000, 6000, 8000, 10000];
   const cases = [
     { label: '스트레스 DSR 미적용', add: 0 },
-    { label: '3단계·지방 변동형 (+1.5%p)', add: 1.5 },
-    { label: '3단계·수도권 변동형 (+3.0%p)', add: 3.0 },
+    { label: '지방 변동형 (+0.75%p, 현재)', add: REGION_RULES.local.stress },
+    { label: '수도권·규제지역 변동형 (+3.0%p)', add: REGION_RULES.regulated.stress },
   ];
   const limit = (income: number, add: number) => principalFrom(income * 0.4 / 12, RATE + add, 40);
   return <>
     <h2>연봉별 DSR 40% 대출한도 예시</h2>
-    <p className="lead">기존 대출이 없고, 신규 주택담보대출 금리 연 {RATE.toFixed(1)}%, 40년 원리금균등상환, DSR 40% 기준으로 계산한 대출한도입니다. 예를 들어 연봉 5천만원이면 스트레스 DSR 미적용 시 {approx(limit(5000, 0))}, 수도권 변동형(3단계) 적용 시 {approx(limit(5000, 3.0))}까지 가능한 것으로 계산됩니다.</p>
+    <p className="lead">기존 대출이 없고, 신규 주택담보대출 금리 연 {RATE.toFixed(1)}%, 40년 원리금균등상환, DSR 40% 기준으로 계산한 대출한도입니다. 예를 들어 연봉 5천만원이면 스트레스 DSR 미적용 시 {approx(limit(5000, 0))}, 수도권·규제지역 변동형 적용 시 {approx(limit(5000, 3.0))}까지 가능한 것으로 계산됩니다.</p>
     <div className="table-scroll example-table"><table>
       <caption>연소득별 DSR 40% 기준 대출한도 (연 {RATE.toFixed(1)}%, 40년)</caption>
       <thead><tr><th>연소득</th>{cases.map(c => <th key={c.label}>{c.label}</th>)}</tr></thead>

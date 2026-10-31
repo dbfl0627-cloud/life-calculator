@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">다섯 달 연속 오른 주담대 금리 막대그래프와 고정형·변동형 금리 비교</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<rect x="34" y="40" width="216" height="200" rx="14" fill="#fff" stroke="#c9d9ea" stroke-width="2"/>
+<text x="52" y="68" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">은행 주담대 평균 금리</text>
+<g fill="#bcd6ee"><rect x="56" y="168" width="26" height="52" rx="5"/><rect x="92" y="156" width="26" height="64" rx="5"/><rect x="128" y="144" width="26" height="76" rx="5"/><rect x="164" y="128" width="26" height="92" rx="5"/></g>
+<rect x="200" y="100" width="30" height="120" rx="5" fill="#216baa"/>
+<line x1="52" x2="234" y1="221" y2="221" stroke="#c9d9ea" stroke-width="2"/>
+<text x="215" y="90" text-anchor="middle" font-size="15" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">4.88%</text>
+<path d="M60 160 L100 148 L136 136 L172 120 L212 92" stroke="#f2c14e" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/>
+<rect x="268" y="52" width="122" height="78" rx="14" fill="#0d4177"/>
+<text x="329" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#bcd6ee" font-family="system-ui, -apple-system, sans-serif">고정형</text>
+<text x="329" y="112" text-anchor="middle" font-size="26" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">5.11%</text>
+<rect x="268" y="146" width="122" height="78" rx="14" fill="#fff" stroke="#c9d9ea" stroke-width="2"/>
+<text x="329" y="174" text-anchor="middle" font-size="13" font-weight="700" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">변동형</text>
+<text x="329" y="206" text-anchor="middle" font-size="26" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">4.76%</text>
+<circle cx="268" cy="138" r="13" fill="#f2c14e"/><text x="268" y="143" text-anchor="middle" font-size="12" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">vs</text>
+</svg>

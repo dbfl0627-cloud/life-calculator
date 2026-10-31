@@ -170,3 +170,48 @@
 .pager a:hover{border-color:#8bb9e2;color:#216baa}
 .pager .cur{background:#0b2545;color:#fff}
 .pager .off{color:#b8c3cf}
+
+/* 블로그 */
+.blog-items{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid #dce4ed}
+.blog-items li a{display:flex;flex-direction:column;gap:6px;padding:20px 4px;border-bottom:1px solid #dce4ed;text-decoration:none;color:#172a43}
+.blog-items li a:hover strong{color:#216baa}
+.blog-items strong{font-size:18px;line-height:1.5}
+.blog-items p{margin:0}
+.blog-items li a.has-thumb{flex-direction:row;align-items:flex-start;gap:18px}
+.blog-text{display:flex;flex-direction:column;gap:6px;min-width:0}
+.blog-thumb{flex:0 0 120px;width:120px;height:86px;border-radius:10px;object-fit:cover;background:#eef5fc}
+.blog-hero{display:block;width:240px;max-width:100%;height:auto;border-radius:12px;margin:18px 0 4px}
+@media(max-width:560px){.blog-thumb{flex-basis:88px;width:88px;height:63px}.blog-items li a.has-thumb{gap:12px}}
+.blog-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#8190a1}
+.blog-sources{margin:28px 0 8px;padding:16px 18px;background:#f4f8fc;border-radius:12px}
+.blog-sources strong{font-size:14px;color:#2c3e55}
+.blog-sources ul{margin:8px 0 0;padding-left:18px}
+.blog-sources li{font-size:13px;line-height:1.9}
+.guide-body blockquote{margin:16px 0;padding:10px 16px;border-left:4px solid #bcd6ee;color:#3b4f66;background:#f8fbfe}
+.guide-body h3{font-size:17px;margin:26px 0 8px}
+.blog-nav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px}
+.blog-nav a{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:1px solid #e5eaf0;border-radius:12px;background:#fff;text-decoration:none;color:#172a43;font-size:14px;font-weight:700;line-height:1.5}
+.blog-nav a span{font-size:12px;color:#8190a1;font-weight:600}
+.blog-nav a.next{text-align:right}
+@media(max-width:720px){.blog-nav{grid-template-columns:1fr}}
+
+/* 모바일: 메뉴 6개가 한 줄에 들어가도록 '계산기' 글자 숨김 */
+@media(max-width:720px){.nav-long{display:none}nav{gap:14px}}
+
+/* 규제 총정리 */
+.reg-areas{padding-left:20px}
+.reg-areas li{font-size:15px;line-height:1.9;color:#3b4f66}
+.reg-history{list-style:none;padding:0;margin:0;border-left:3px solid #d4e5f4}
+.reg-history li{position:relative;padding:0 0 22px 20px}
+.reg-history li::before{content:'';position:absolute;left:-8px;top:5px;width:13px;height:13px;border-radius:50%;background:#216baa;border:3px solid #fff}
+.reg-history time{font-size:12px;font-weight:700;color:#216baa}
+.reg-history strong{display:block;font-size:16px;margin:2px 0 4px}
+.reg-history p{margin:0;font-size:14px;color:#3b4f66;line-height:1.8}
+.reg-src{display:block;margin-top:4px;font-size:12px;color:#8190a1}
+.reg-src a{color:#216baa}
+.reg-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding:16px 18px;border-radius:12px;background:#0b2545;color:#fff;text-decoration:none}
+.reg-banner strong{font-size:16px}
+.reg-banner span{font-size:13px;color:#bcd6ee;flex:1}
+.regulations .example-table td:first-child{white-space:normal;min-width:120px}
+.regulations .example-table td{white-space:normal}
+.regulations .example-table td,.regulations .example-table th{text-align:left}
