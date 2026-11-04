@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">12월 31일 유예 종료 달력과 지방 주담대 스트레스 금리가 0.75%p에서 1.5%p로 오를 때 줄어드는 대출 한도 동전 더미</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/>
+<rect x="36" y="52" width="150" height="170" rx="16" fill="#fff" stroke="#bcd6ee" stroke-width="2"/>
+<path d="M36 68 a16 16 0 0 1 16 -16 h118 a16 16 0 0 1 16 16 v34 h-150 Z" fill="#e05a4f"/>
+<rect x="66" y="40" width="10" height="26" rx="5" fill="#0b2545"/><rect x="146" y="40" width="10" height="26" rx="5" fill="#0b2545"/>
+<text x="111" y="92" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="system-ui, -apple-system, sans-serif">12월</text>
+<text x="111" y="182" text-anchor="middle" font-size="56" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">31</text>
+<g><ellipse cx="262" cy="214" rx="34" ry="10" fill="#0d4177"/><rect x="228" y="134" width="68" height="80" fill="#216baa"/><ellipse cx="262" cy="134" rx="34" ry="10" fill="#4f93cf"/>
+<g stroke="#0d4177" stroke-width="2" opacity=".5"><path d="M228 154 a34 10 0 0 0 68 0"/><path d="M228 174 a34 10 0 0 0 68 0"/><path d="M228 194 a34 10 0 0 0 68 0"/></g></g>
+<g><ellipse cx="350" cy="214" rx="34" ry="10" fill="#0d4177"/><rect x="316" y="160" width="68" height="54" fill="#216baa"/><ellipse cx="350" cy="160" rx="34" ry="10" fill="#4f93cf"/>
+<rect x="316" y="134" width="68" height="20" rx="6" fill="none" stroke="#e05a4f" stroke-width="2" stroke-dasharray="5 4"/></g>
+<text x="262" y="112" text-anchor="middle" font-size="22" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">0.75</text>
+<text x="350" y="112" text-anchor="middle" font-size="22" font-weight="900" fill="#e05a4f" font-family="system-ui, -apple-system, sans-serif">1.5</text>
+<path d="M290 96 h26 m-8 -6 l8 6 l-8 6" stroke="#f2c14e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="306" y="252" text-anchor="middle" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">스트레스 금리 %p</text>
+</svg>

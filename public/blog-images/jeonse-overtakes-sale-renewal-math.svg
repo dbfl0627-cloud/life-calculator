@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">올해 서울 아파트 전셋값 누적 상승률 8.91%가 매매 8.73%를 앞지른 것을 두 선의 교차로 표현한 그래프</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/>
+<rect x="28" y="28" width="364" height="244" rx="18" fill="#fff" stroke="#d4e5f4" stroke-width="2"/>
+<g stroke="#d4e5f4" stroke-width="1.5"><line x1="52" x2="268" y1="96" y2="96"/><line x1="52" x2="268" y1="156" y2="156"/><line x1="52" x2="268" y1="216" y2="216"/></g>
+<path d="M56 226 C100 200 150 176 196 150 S240 122 262 112" stroke="#bcd6ee" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M56 240 C110 228 150 196 190 156 S236 98 262 86" stroke="#216baa" stroke-width="6" fill="none" stroke-linecap="round"/>
+<circle cx="194" cy="152" r="11" fill="#f2c14e" stroke="#fff" stroke-width="3"/>
+<circle cx="262" cy="86" r="7" fill="#216baa"/><circle cx="262" cy="112" r="7" fill="#4f93cf"/>
+<path d="M290 70 l30 -24 l30 24 v8 h-60 Z" fill="#0b2545"/><rect x="296" y="78" width="48" height="34" rx="3" fill="#0d4177"/><rect x="313" y="92" width="14" height="20" rx="2" fill="#f2c14e"/>
+<text x="320" y="152" text-anchor="middle" font-size="13" font-weight="800" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">전세</text>
+<text x="320" y="184" text-anchor="middle" font-size="28" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">8.91%</text>
+<text x="320" y="228" text-anchor="middle" font-size="14" font-weight="800" fill="#4f93cf" font-family="system-ui, -apple-system, sans-serif">매매 8.73%</text>
+</svg>
