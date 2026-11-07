@@ -3,8 +3,8 @@
  * 규제가 바뀌면 이 파일만 고치고 REG_CHECKED(최종 확인일)와 REG_HISTORY(변경 이력)를 함께 갱신하세요.
  * 금액 단위: 만원.
  */
-export const REG_CHECKED = '2026-11-04';
-export const REG_CHECKED_LABEL = '2026년 11월 4일';
+export const REG_CHECKED = '2026-11-07';
+export const REG_CHECKED_LABEL = '2026년 11월 7일';
 
 export type RegionKey = 'regulated' | 'capital' | 'local';
 export const REGION_RULES: Record<RegionKey, {
