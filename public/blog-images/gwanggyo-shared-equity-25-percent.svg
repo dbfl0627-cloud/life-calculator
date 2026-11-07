@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">집 한 채를 다섯 조각으로 나눠 첫 25%만 채운 그림으로 분양가 25%로 입주하고 나머지 75%를 20년에 걸쳐 사들이는 지분적립형 주택을 표현한 일러스트</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/>
+<path d="M40 128 L140 52 L240 128 Z" fill="#0b2545"/>
+<rect x="52" y="128" width="176" height="128" fill="#d4e5f4"/>
+<rect x="52" y="128" width="44" height="128" fill="#216baa"/>
+<g stroke="#eef5fc" stroke-width="4"><line x1="96" y1="128" x2="96" y2="256"/><line x1="131" y1="128" x2="131" y2="256"/><line x1="166" y1="128" x2="166" y2="256"/><line x1="201" y1="128" x2="201" y2="256"/></g>
+<rect x="64" y="200" width="20" height="56" rx="3" fill="#f2c14e"/>
+<rect x="40" y="256" width="200" height="8" rx="4" fill="#0b2545"/>
+<g fill="#4f93cf"><circle cx="113" cy="234" r="5"/><circle cx="148" cy="234" r="5"/><circle cx="183" cy="234" r="5"/><circle cx="214" cy="234" r="5"/></g>
+<text x="318" y="104" text-anchor="middle" font-size="14" font-weight="800" fill="#0d4177" font-family="system-ui, -apple-system, sans-serif">입주 때</text>
+<text x="318" y="158" text-anchor="middle" font-size="48" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">25%</text>
+<rect x="262" y="190" width="112" height="40" rx="20" fill="#0b2545"/>
+<text x="318" y="216" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="system-ui, -apple-system, sans-serif">75%는 20년</text>
+</svg>

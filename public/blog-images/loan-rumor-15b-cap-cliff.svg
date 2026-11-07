@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">주택 가격 15억원과 25억원 경계에서 주담대 상한이 6억원, 4억원, 2억원으로 계단처럼 떨어지는 모습을 그린 그래프</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/>
+<line x1="40" y1="250" x2="380" y2="250" stroke="#0b2545" stroke-width="4" stroke-linecap="round"/>
+<path d="M40 250 V82 H170 V146 H290 V208 H380 V250 Z" fill="#bcd6ee"/>
+<path d="M40 82 H170 V146 H290 V208 H380" fill="none" stroke="#216baa" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="170" y1="40" x2="170" y2="250" stroke="#e05a4f" stroke-width="3" stroke-dasharray="8 7"/>
+<line x1="290" y1="110" x2="290" y2="250" stroke="#4f93cf" stroke-width="3" stroke-dasharray="8 7"/>
+<circle cx="170" cy="82" r="10" fill="#f2c14e" stroke="#fff" stroke-width="3"/>
+<text x="105" y="140" text-anchor="middle" font-size="34" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">6억</text>
+<text x="230" y="196" text-anchor="middle" font-size="26" font-weight="900" fill="#0d4177" font-family="system-ui, -apple-system, sans-serif">4억</text>
+<rect x="190" y="32" width="96" height="38" rx="19" fill="#e05a4f"/>
+<text x="238" y="58" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">15억</text>
+</svg>
