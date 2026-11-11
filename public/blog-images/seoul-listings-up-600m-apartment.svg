@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">겹겹이 쌓인 매물 카드와 6억원 표시 지도 핀으로 서울 아파트 매물 31% 증가와 6억원 이하 거래 비중 확대를 표현한 일러스트</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/>
+<rect x="56" y="196" width="170" height="64" rx="12" fill="#bcd6ee"/>
+<rect x="68" y="150" width="170" height="64" rx="12" fill="#4f93cf"/>
+<rect x="80" y="104" width="170" height="64" rx="12" fill="#216baa"/>
+<rect x="92" y="58" width="170" height="64" rx="12" fill="#0d4177"/>
+<rect x="108" y="74" width="40" height="32" rx="6" fill="#d4e5f4"/>
+<rect x="160" y="78" width="84" height="9" rx="4.5" fill="#bcd6ee"/>
+<rect x="160" y="94" width="56" height="9" rx="4.5" fill="#bcd6ee"/>
+<text x="150" y="240" text-anchor="middle" font-size="36" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">+31%</text>
+<path d="M330 236 C330 236 274 172 274 132 A56 56 0 0 1 386 132 C386 172 330 236 330 236 Z" fill="#e05a4f"/>
+<circle cx="330" cy="132" r="38" fill="#fff"/>
+<text x="330" y="142" text-anchor="middle" font-size="28" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">6억</text>
+<rect x="296" y="248" width="68" height="12" rx="6" fill="#f2c14e"/>
+</svg>
