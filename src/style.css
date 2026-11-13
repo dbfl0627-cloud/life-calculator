@@ -172,6 +172,19 @@
 .pager .off{color:#b8c3cf}
 
 /* 블로그 */
+.blog-search{position:relative;display:flex;align-items:center;margin:22px 0 0;border:1px solid #c9d9ea;border-radius:12px;background:#fff;padding:0 12px;gap:8px}
+.blog-search:focus-within{border-color:#216baa;box-shadow:0 0 0 3px #d4e5f4}
+.blog-search>svg{color:#7a8a9c;flex:0 0 auto}
+.blog-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;height:46px;font-size:16px;color:#172a43}
+.blog-search input::-webkit-search-cancel-button{display:none}
+.blog-search button{border:0;background:#eef3f8;color:#65768b;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.blog-tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;padding-bottom:36px}
+.blog-tags button{border:1px solid #d9e1e9;background:#fff;color:#2c3e55;border-radius:999px;padding:6px 13px;font-size:13px;font-weight:700;cursor:pointer}
+.blog-tags button:hover{border-color:#8bb9e2;color:#216baa}
+.blog-tags button.on{background:#0b2545;border-color:#0b2545;color:#fff}
+.blog-search-count{margin:20px 0 0;font-size:14px;color:#65768b}
+.blog-search-count strong{color:#172a43}
+.blog-search-reset{border:0;background:none;color:#216baa;font-weight:700;font-size:13px;cursor:pointer;margin-left:6px;text-decoration:underline}
 .blog-items{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid #dce4ed}
 .blog-items li a{display:flex;flex-direction:column;gap:6px;padding:20px 4px;border-bottom:1px solid #dce4ed;text-decoration:none;color:#172a43}
 .blog-items li a:hover strong{color:#216baa}

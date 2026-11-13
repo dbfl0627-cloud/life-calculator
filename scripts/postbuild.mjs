@@ -71,7 +71,7 @@ await writeFile('dist/llms.txt',`# ZIPMOYA (집모야)
 - [내 집 마련 대출·자금 가이드 목록](${SITE_URL}/guide/)
 ${GUIDE_META.map(g=>`- [${g.title}](${SITE_URL}/guide/${g.slug}/): ${g.description}`).join('\n')}
 
-## 블로그 (매주 토요일 부동산·대출 뉴스 정리)
+## 블로그 (매일 부동산·대출 뉴스 정리)
 - [블로그 목록](${SITE_URL}/blog/)
 ${BLOG_POSTS.slice(0,30).map(p=>`- [${p.title}](${SITE_URL}/blog/${p.slug}/) (${p.date}): ${p.summary}`).join('\n')}
 
