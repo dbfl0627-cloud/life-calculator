@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">11월 26일 금통위를 앞두고 기준금리 3.00%에서 오를 수 있음을 나타낸 계단과 화살표</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<rect x="40" y="190" width="70" height="56" rx="8" fill="#bcd6ee"/><rect x="110" y="160" width="70" height="86" rx="8" fill="#4f93cf"/><rect x="180" y="128" width="70" height="118" rx="8" fill="#216baa"/>
+<rect x="250" y="96" width="70" height="150" rx="8" fill="#eef5fc" stroke="#e05a4f" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="285" y="182" text-anchor="middle" font-size="40" font-weight="900" fill="#e05a4f" font-family="system-ui, -apple-system, sans-serif">?</text>
+<text x="215" y="118" text-anchor="middle" font-size="24" font-weight="900" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">3.00%</text>
+<rect x="296" y="30" width="96" height="50" rx="12" fill="#0b2545"/>
+<text x="344" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#bcd6ee" font-family="system-ui, -apple-system, sans-serif">금통위</text>
+<text x="344" y="72" text-anchor="middle" font-size="18" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">11.26</text>
+</svg>

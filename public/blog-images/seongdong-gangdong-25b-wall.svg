@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">집값 25억원 경계선을 넘으면 대출 한도가 4억원에서 2억원으로 줄어드는 모습</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<line x1="210" y1="40" x2="210" y2="246" stroke="#e05a4f" stroke-width="4" stroke-dasharray="10 8"/>
+<rect x="164" y="30" width="92" height="36" rx="18" fill="#e05a4f"/><text x="210" y="54" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">25억</text>
+<rect x="60" y="126" width="100" height="120" rx="10" fill="#216baa"/>
+<text x="110" y="196" text-anchor="middle" font-size="28" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">4억</text>
+<rect x="260" y="186" width="100" height="60" rx="10" fill="#4f93cf"/>
+<text x="310" y="226" text-anchor="middle" font-size="28" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">2억</text>
+<text x="110" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">25억 이하</text>
+<text x="310" y="172" text-anchor="middle" font-size="12" font-weight="700" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">25억 초과</text>
+</svg>
