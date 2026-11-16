@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">같은 6억 분양가에서 서울과 경기의 잔금 때 필요한 현금을 동전 더미로 비교한 일러스트</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<rect x="150" y="26" width="120" height="40" rx="12" fill="#0b2545"/><text x="210" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="system-ui, -apple-system, sans-serif">분양가 6억</text>
+<g stroke="#c98f1c" stroke-width="1.5"><ellipse cx="110" cy="240" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="226" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="212" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="198" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="184" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="170" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="110" cy="156" rx="40" ry="11" fill="#f2c14e"/>
+<ellipse cx="310" cy="240" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="310" cy="226" rx="40" ry="11" fill="#e0a92e"/><ellipse cx="310" cy="212" rx="40" ry="11" fill="#f2c14e"/></g>
+<text x="110" y="128" text-anchor="middle" font-size="26" font-weight="900" fill="#e05a4f" font-family="system-ui, -apple-system, sans-serif">3.6억</text>
+<text x="310" y="184" text-anchor="middle" font-size="26" font-weight="900" fill="#216baa" font-family="system-ui, -apple-system, sans-serif">1.8억</text>
+<rect x="72" y="80" width="76" height="26" rx="13" fill="#fff" stroke="#c9d9ea"/><text x="110" y="98" text-anchor="middle" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">서울</text>
+<rect x="272" y="136" width="76" height="26" rx="13" fill="#fff" stroke="#c9d9ea"/><text x="310" y="154" text-anchor="middle" font-size="13" font-weight="800" fill="#0b2545" font-family="system-ui, -apple-system, sans-serif">경기</text>
+</svg>
