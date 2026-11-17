@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="t"><title id="t">6억원 대출 한도 막대에서 방공제 5,500만원이 잘려 나가는 모습</title>
+<rect width="420" height="300" rx="24" fill="#eef5fc"/><rect x="30" y="250" width="360" height="10" rx="5" fill="#d4e5f4"/>
+<rect x="50" y="56" width="320" height="34" rx="17" fill="#0b2545"/><text x="210" y="79" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="system-ui, -apple-system, sans-serif">서울 15억 아파트 한도</text>
+<rect x="50" y="122" width="270" height="64" rx="12" fill="#216baa"/>
+<text x="185" y="164" text-anchor="middle" font-size="28" font-weight="900" fill="#fff" font-family="system-ui, -apple-system, sans-serif">5.45억</text>
+<rect x="330" y="122" width="44" height="64" rx="12" fill="#eef5fc" stroke="#e05a4f" stroke-width="3" stroke-dasharray="7 5"/>
+<path d="M324 112 L324 198" stroke="#e05a4f" stroke-width="3"/>
+<text x="384" y="222" text-anchor="end" font-size="22" font-weight="900" fill="#e05a4f" font-family="system-ui, -apple-system, sans-serif">-5,500만</text>
+<text x="120" y="222" text-anchor="middle" font-size="13" font-weight="800" fill="#65768b" font-family="system-ui, -apple-system, sans-serif">방공제 적용 시</text>
+</svg>

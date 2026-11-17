@@ -1,8 +1,9 @@
 /** 가이드(정보 글) 목록. 새 글은 여기에 추가하고 content.tsx에 본문을 넣으면 메뉴·sitemap·구조화 데이터에 자동 반영됩니다. */
-export type GuideImage = 'steps' | 'salary' | 'stress' | 'ratio' | 'repay' | 'term' | 'rate' | 'grace' | 'cost' | 'tag';
+export type GuideImage = 'steps' | 'salary' | 'stress' | 'ratio' | 'repay' | 'term' | 'rate' | 'grace' | 'cost' | 'tag' | 'switch';
 export type GuideMeta = { slug: string; title: string; description: string; date: string; updated?: string; tag: string; tools: string[]; image: GuideImage };
 
 export const GUIDE_META: GuideMeta[] = [
+  { slug: 'refinance-prepayment-fee', image: 'switch', tag: '금리', title: '대출 갈아타기 손익 계산법: 중도상환수수료와 이자 절감 비교', description: '주택담보대출을 더 낮은 금리로 갈아탈 때 중도상환수수료, 부대비용, 남은 기간에 따라 실제로 얼마가 남는지 계산하고 손익분기 시점을 확인하는 방법을 정리했습니다.', date: '2026-11-17', tools: ['/', '/dsr/'] },
   { slug: 'home-buying-plan', image: 'steps', tag: '내 집 마련', title: '내 집 마련 자금 계획 5단계: 대출한도부터 부대비용까지', description: 'LTV와 DSR로 대출한도를 확인하고, 필요 자금과 취득세·중개보수 같은 부대비용까지 순서대로 계산하는 내 집 마련 자금 계획법을 정리했습니다.', date: '2026-10-25', tools: ['/find-home/', '/ltv/', '/dsr/'] },
   { slug: 'salary-loan-limit', image: 'salary', tag: '대출한도', title: '연봉별 주택담보대출 한도 정리 (DSR 40% 기준)', description: '연봉 3천만원부터 1억원까지 DSR 40% 기준 주택담보대출 한도를 금리·기간별로 계산하고, 스트레스 DSR 적용 시 한도가 얼마나 줄어드는지 비교합니다.', date: '2026-10-25', tools: ['/dsr/', '/find-home/'] },
   { slug: 'stress-dsr', image: 'stress', tag: '대출규제', title: '스트레스 DSR이란? 단계별 적용과 한도 변화 쉽게 정리', description: '스트레스 DSR의 개념과 1·2·3단계 차이, 지역·금리유형별 반영 방식, 실제 대출한도가 얼마나 줄어드는지 예시로 설명합니다.', date: '2026-10-25', tools: ['/dsr/'] },

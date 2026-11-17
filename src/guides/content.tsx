@@ -34,6 +34,37 @@ function T({ caption, head, rows }: { caption: string; head: string[]; rows: (st
 const Tip = ({ children }: { children: ReactNode }) => <p className="guide-tip">{children}</p>;
 
 export const GUIDE_CONTENT: Record<string, () => ReactNode> = {
+  'refinance-prepayment-fee': () => {
+    const B = 30000, years = 28, from = 5.26, to = 4.76;
+    const save = payment(B, from, years) - payment(B, to, years);
+    const fee = (rate: number, elapsedYears: number) => B * rate / 100 * Math.max(0, 3 - elapsedYears) / 3;
+    const extra = 7.5; // 인지세 본인 부담분(대출 1억원 초과 10억원 이하 15만원의 절반)
+    const months = (cost: number) => Math.ceil((cost + extra) / save);
+    const rows = [[0.56, 1], [0.56, 2], [1.43, 1], [1.43, 2]].map(([r, e]) => [`${r}%`, `${e}년 경과`, won(fee(r, e)), `약 ${months(fee(r, e))}개월`]);
+    const small = payment(B, 5.01, years), smallSave = payment(B, from, years) - small;
+    return <>
+      <p>금리가 바뀌는 시기에는 "지금 대출을 더 낮은 금리로 갈아타면 이득일까?"라는 질문이 많아집니다. 답은 금리 차이만으로는 나오지 않습니다. 갈아탈 때 드는 중도상환수수료와 부대비용을, 앞으로 아끼는 이자로 몇 달 만에 되찾을 수 있는지를 따져야 합니다. 이 글에서는 그 계산 순서를 숫자로 정리했습니다.</p>
+      <h2>1단계: 매달 얼마를 아끼는지 계산하기</h2>
+      <p>잔액 3억원, 남은 기간 {years}년인 원리금균등 대출을 연 {from}%에서 연 {to}%로 갈아탄다고 가정하겠습니다. 월 상환액은 {won(payment(B, from, years))}에서 {won(payment(B, to, years))}으로 줄어, 매달 약 {won(save)}을 아낍니다. 1년이면 약 {won(save * 12)}입니다.</p>
+      <h2>2단계: 중도상환수수료 계산하기</h2>
+      <p>중도상환수수료는 대부분 <strong>대출 잔액 × 수수료율 × (3년 − 경과 기간) ÷ 3년</strong> 방식으로 계산합니다. 대출을 받은 지 3년이 지나면 수수료가 없고, 그 전이라면 남은 기간만큼 비례해서 냅니다. 2025년 1월 13일 이후 은행권 주담대 수수료가 실제 비용만 반영하도록 바뀌면서, 고정금리 주담대 평균 수수료율은 1.43%에서 0.56%로 낮아졌습니다. 그 전에 받은 대출은 예전 수수료율이 그대로 적용됩니다.</p>
+      <T caption={`잔액 3억원, 연 ${from}% → ${to}%, 월 절감액 약 ${won(save)} 기준`} head={['수수료율', '경과 기간', '중도상환수수료', '본전 회수']} rows={rows}/>
+      <p>본전 회수 기간에는 인지세 본인 부담분 약 {won(extra)}을 더했습니다. 새 대출의 근저당 설정비는 보통 은행이 부담하지만, 은행·상품마다 다를 수 있으니 확인이 필요합니다.</p>
+      <h2>3단계: 앞으로 얼마나 더 갖고 있을지와 비교하기</h2>
+      <p>본전 회수 기간보다 대출을 오래 유지할 계획이라면 갈아타는 쪽이 유리합니다. 반대로 1~2년 안에 집을 팔거나 목돈으로 상환할 계획이라면 수수료만 내고 끝날 수 있습니다. 금리 차이가 작을 때는 특히 조심해야 합니다. 같은 조건에서 금리 차이가 0.25%p(연 {from}% → 5.01%)라면 매달 절감액은 약 {won(smallSave)}으로 줄어, 수수료율 1.43%·1년 경과 기준 본전까지 약 {Math.ceil((fee(1.43, 1) + extra) / smallSave)}개월이 걸립니다.</p>
+      <h2>4단계: 새 대출 한도를 다시 확인하기</h2>
+      <p>갈아타기는 새로 대출을 받는 것이라 지금 기준의 LTV, DSR, 스트레스 DSR이 다시 적용됩니다. 예전보다 규제가 강해졌다면 기존 잔액만큼 빌리지 못할 수 있습니다. 특히 수도권·규제지역은 스트레스 금리가 높게 붙고 주택가격별 대출 상한도 있으니, 신청 전에 <a href="/dsr/">DSR 계산기</a>와 <a href="/regulations/">대출 규제 총정리</a>에서 한도를 먼저 확인하세요.</p>
+      <h2>갈아타기 전 체크리스트</h2>
+      <ul>
+        <li>내 대출의 실행일, 수수료율, 3년 면제 시점 확인하기 (대출 약정서 또는 은행 앱)</li>
+        <li>새 대출의 금리 유형(고정·변동·주기형)과 우대금리 조건, 조건을 못 지켰을 때의 금리 확인하기</li>
+        <li>3년 면제 시점이 몇 달 남지 않았다면 그때까지 기다리는 것이 나은지 계산하기</li>
+        <li>온라인 대환대출 서비스로 여러 은행 금리를 한 번에 비교하기</li>
+      </ul>
+      <Tip>월 상환액 차이는 <a href="/">주담대 계산기</a>에서 금리만 바꿔 넣으면 바로 확인할 수 있습니다. 위 표처럼 수수료를 월 절감액으로 나누면 본전 회수 기간이 나옵니다.</Tip>
+    </>;
+  },
+
   'home-buying-plan': () => {
     const income = 6000, cash = 20000, price = 60000;
     const ltv = price * 0.7, dsr = dsrLimit(income, RATE + 1.5, 40), loan = Math.min(ltv, dsr);

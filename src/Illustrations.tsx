@@ -330,3 +330,22 @@ export function PriceTagIllustration({ uid = '' }: U = {}) {
     <text x="210" y="246" textAnchor="middle" fontSize="13" fontWeight="800" fill="#7a8a9c" fontFamily={FONT}>무엇을 기준으로 볼까?</text>
   </Frame>;
 }
+
+/** 대출 갈아타기: 두 은행 사이를 오가는 화살표와 저울 */
+export function SwitchIllustration({ uid = '' }: U = {}) {
+  return <Frame id={`illust-switch${uid}`} title="높은 금리 은행에서 낮은 금리 은행으로 대출을 옮기며 수수료와 이자 절감을 저울질하는 일러스트">
+    {[{ x: 40, c: '#4f93cf', r: '5.26%' }, { x: 270, c: '#216baa', r: '4.76%' }].map(b => <g key={b.x}>
+      <path d={`M${b.x} 92 L${b.x + 55} 60 L${b.x + 110} 92 Z`} fill={b.c}/>
+      <rect x={b.x + 6} y="92" width="98" height="78" rx="6" fill="#fff" stroke="#c9d9ea" strokeWidth="2"/>
+      {[0, 1, 2].map(i => <rect key={i} x={b.x + 18 + i * 28} y="104" width="18" height="40" rx="4" fill="#d4e5f4"/>)}
+      <text x={b.x + 55} y="200" textAnchor="middle" fontSize="22" fontWeight="900" fill={b.c} fontFamily={FONT}>{b.r}</text>
+    </g>)}
+    <path d="M160 104 H252" stroke="#0b2545" strokeWidth="5" strokeLinecap="round"/>
+    <path d="M240 92 L256 104 L240 116" stroke="#0b2545" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="210" y1="140" x2="210" y2="236" stroke="#65768b" strokeWidth="4"/>
+    <line x1="170" y1="150" x2="250" y2="140" stroke="#65768b" strokeWidth="4" strokeLinecap="round"/>
+    <path d="M160 150 l10 22 h-20 Z" fill="#e05a4f"/><text x="160" y="190" textAnchor="middle" fontSize="11" fontWeight="800" fill="#e05a4f" fontFamily={FONT}>수수료</text>
+    <path d="M250 140 l10 22 h-20 Z" fill="#f2c14e"/><text x="250" y="180" textAnchor="middle" fontSize="11" fontWeight="800" fill="#b07d10" fontFamily={FONT}>절감</text>
+    <rect x="186" y="232" width="48" height="10" rx="5" fill="#0b2545"/>
+  </Frame>;
+}
